@@ -19,17 +19,17 @@ const paperTexture = `
 
 export const CardContainer = styled.div`
   position: absolute;
-  width: ${props => props.isExpanded ? '350px' : '250px'}; 
-  height: ${props => props.isExpanded ? 'auto' : '150px'};
-  min-height: ${props => props.isExpanded ? '300px' : '150px'};
-  left: ${props => props.x}px;
-  top: ${props => props.y}px;
-  transform: ${props => `rotate(${props.rotate}deg)`};
+  width: ${props => props.$isExpanded ? '350px' : '250px'}; 
+  height: ${props => props.$isExpanded ? 'auto' : '150px'};
+  min-height: ${props => props.$isExpanded ? '300px' : '150px'};
+  left: ${props => props.$x}px;
+  top: ${props => props.$y}px;
+  transform: ${props => `rotate(${props.$rotate}deg)`};
   transform-origin: center center;
-  transition: ${props => props.isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
-  z-index: ${props => props.isDragging ? 100 : props.zIndex};
+  transition: ${props => props.$isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
+  z-index: ${props => props.$isDragging ? 100 : props.$zIndex};
   perspective: 1500px;
-  cursor: ${props => props.isDragging ? 'grabbing' : 'grab'};
+  cursor: ${props => props.$isDragging ? 'grabbing' : 'grab'};
   
   &.new-card {
     animation: cardPulse 0.6s ease-out;
@@ -37,14 +37,14 @@ export const CardContainer = styled.div`
   
   @keyframes cardPulse {
     0% {
-      transform: scale(0) rotate(${props => props.rotate}deg);
+      transform: scale(0) rotate(${props => props.$rotate}deg);
       opacity: 0;
     }
     50% {
-      transform: scale(1.1) rotate(${props => props.rotate}deg);
+      transform: scale(1.1) rotate(${props => props.$rotate}deg);
     }
     100% {
-      transform: scale(1) rotate(${props => props.rotate}deg);
+      transform: scale(1) rotate(${props => props.$rotate}deg);
       opacity: 1;
     }
   }
@@ -53,10 +53,10 @@ export const CardContainer = styled.div`
 export const RecipeCardWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: ${props => props.isExpanded ? 'auto' : '100%'};
+  height: ${props => props.$isExpanded ? 'auto' : '100%'};
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.455, 0.03, 0.515, 1.55);
-  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+  transform: ${props => props.$isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
   will-change: transform;
   
   &:after {
@@ -64,10 +64,10 @@ export const RecipeCardWrapper = styled.div`
     position: absolute;
     width: 8px;
     height: 8px;
-    background-color: ${props => props.pinColor || '#b54b35'};
+    background-color: ${props => props.$pinColor || '#b54b35'};
     border-radius: 50%;
-    top: ${props => props.pinTop || '8px'};
-    left: ${props => props.pinLeft || '50%'};
+    top: ${props => props.$pinTop || '8px'};
+    left: ${props => props.$pinLeft || '50%'};
     transform: translateX(-50%);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     z-index: 999;
@@ -79,15 +79,15 @@ export const CardSide = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-color: ${props => props.back ? '#f0e8d0' : '#f5f0dc'};
+  background-color: ${props => props.$back ? '#f0e8d0' : '#f5f0dc'};
   ${paperTexture}
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   padding: 12px;
-  transform: ${props => props.back ? 'rotateY(180deg)' : 'rotateY(0deg)'};
-  overflow-y: ${props => props.back ? 'auto' : 'visible'};
+  transform: ${props => props.$back ? 'rotateY(180deg)' : 'rotateY(0deg)'};
+  overflow-y: ${props => props.$back ? 'auto' : 'visible'};
   will-change: transform;
 
   &:before {
@@ -156,8 +156,8 @@ export const ExpandButton = styled.button`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: ${props => props.isExpanded ? '#8a7248' : 'rgba(200, 180, 120, 0.8)'};
-  color: ${props => props.isExpanded ? '#fff' : '#59483b'};
+  background-color: ${props => props.$isExpanded ? '#8a7248' : 'rgba(200, 180, 120, 0.8)'};
+  color: ${props => props.$isExpanded ? '#fff' : '#59483b'};
   border: 2px solid #8a7248;
   display: flex;
   align-items: center;
@@ -187,8 +187,8 @@ export const NotesButton = styled.button`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: ${props => props.hasNote ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
-  color: ${props => props.hasNote ? '#fff' : '#59483b'};
+  background-color: ${props => props.$hasNote ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
+  color: ${props => props.$hasNote ? '#fff' : '#59483b'};
   border: 2px solid #b38c42;
   display: flex;
   align-items: center;

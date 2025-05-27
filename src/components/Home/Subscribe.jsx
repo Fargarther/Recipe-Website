@@ -1,4 +1,4 @@
-// Subscribe.js
+// src/components/Home/Subscribe.jsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import confetti from 'react-confetti';
@@ -52,7 +52,7 @@ const InputWrapper = styled.div`
 const EmailInput = styled.input`
   width: 100%;
   padding: 1rem;
-  border: 1.5px solid ${props => props.error ? '#e76f51' : 'var(--text-light)'};
+  border: 1.5px solid ${props => props.$error ? '#e76f51' : 'var(--text-light)'};
   border-right: none;
   border-radius: 0.5rem 0 0 0.5rem;
   font-size: 1rem;
@@ -60,12 +60,12 @@ const EmailInput = styled.input`
   
   &:focus {
     outline: none;
-    border-color: ${props => props.error ? '#e76f51' : 'var(--accent)'};
-    box-shadow: 0 0 0 2px ${props => props.error ? 'rgba(231, 111, 81, 0.2)' : 'rgba(166, 124, 82, 0.2)'};
+    border-color: ${props => props.$error ? '#e76f51' : 'var(--accent)'};
+    box-shadow: 0 0 0 2px ${props => props.$error ? 'rgba(231, 111, 81, 0.2)' : 'rgba(166, 124, 82, 0.2)'};
   }
   
   @media (max-width: 768px) {
-    border-right: 1.5px solid ${props => props.error ? '#e76f51' : 'var(--text-light)'};
+    border-right: 1.5px solid ${props => props.$error ? '#e76f51' : 'var(--text-light)'};
     border-radius: 0.5rem;
     margin-bottom: 0.8rem;
   }
@@ -77,7 +77,7 @@ const ValidationMessage = styled.span`
   left: 0;
   color: #e76f51;
   font-size: 0.875rem;
-  opacity: ${props => props.show ? 1 : 0};
+  opacity: ${props => props.$show ? 1 : 0};
   transition: opacity 0.3s;
 `;
 
@@ -132,7 +132,7 @@ const SubmitButton = styled.button`
 const SuccessMessage = styled.p`
   color: #2a9d8f;
   margin-top: 1.5rem;
-  display: ${props => props.visible ? 'block' : 'none'};
+  display: ${props => props.$visible ? 'block' : 'none'};
   font-weight: 600;
 `;
 
@@ -144,13 +144,13 @@ const ToastContainer = styled.div`
 `;
 
 const Toast = styled.div`
-  background: ${props => props.type === 'success' ? '#2a9d8f' : '#e76f51'};
+  background: ${props => props.$type === 'success' ? '#2a9d8f' : '#e76f51'};
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 8px;
   margin-bottom: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transform: translateX(${props => props.show ? '0' : '100%'});
+  transform: translateX(${props => props.$show ? '0' : '100%'});
   transition: transform 0.3s ease;
   
   .toast-content {
@@ -241,16 +241,16 @@ function Subscribe() {
                 setEmail(e.target.value);
                 if (emailError) setEmailError('');
               }}
-              error={!!emailError}
+              $error={!!emailError}
             />
-            <ValidationMessage show={!!emailError}>
+            <ValidationMessage $show={!!emailError}>
               {emailError}
             </ValidationMessage>
           </InputWrapper>
           <SubmitButton type="submit">Subscribe</SubmitButton>
         </SubscribeForm>
         
-        <SuccessMessage visible={showSuccess}>
+        <SuccessMessage $visible={showSuccess}>
           Thank you for subscribing! Check your inbox soon.
         </SuccessMessage>
         
@@ -259,7 +259,7 @@ function Subscribe() {
       
       <ToastContainer>
         {toasts.map(toast => (
-          <Toast key={toast.id} type={toast.type} show={toast.show}>
+          <Toast key={toast.id} $type={toast.type} $show={toast.show}>
             <div className="toast-content">
               <span>{toast.type === 'success' ? '✓' : '✕'}</span>
               <span>{toast.message}</span>

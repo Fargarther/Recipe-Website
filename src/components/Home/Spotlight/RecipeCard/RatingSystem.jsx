@@ -10,13 +10,13 @@ const RatingContainer = styled.div`
 `;
 
 const Star = styled.span`
-  color: ${props => props.filled ? '#b38c42' : '#d1c6a8'};
+  color: ${props => props.$filled ? '#b38c42' : '#d1c6a8'};
   cursor: pointer;
   font-size: 12px;
   transition: color 0.2s;
   
   &:hover {
-    color: ${props => !props.filled ? '#c9a051' : '#b38c42'};
+    color: ${props => !props.$filled ? '#c9a051' : '#b38c42'};
   }
 `;
 
@@ -35,7 +35,7 @@ const RatingSystem = ({ rating, onRate }) => {
         <Star
           key={value}
           className="star"
-          filled={value <= rating}
+          $filled={value <= rating}
           onClick={() => onRate(value)}
         >
           ★

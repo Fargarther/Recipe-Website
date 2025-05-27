@@ -63,19 +63,19 @@ const RecipeCard = ({
   return (
     <CardContainer
       className={isNew ? 'new-card' : ''}
-      isDragging={isDragging}
-      isExpanded={isExpanded}
-      rotate={card.rotate}
-      x={position.x}
-      y={position.y}
-      zIndex={card.zIndex}
+      $isDragging={isDragging}
+      $isExpanded={isExpanded}
+      $rotate={card.rotate}
+      $x={position.x}
+      $y={position.y}
+      $zIndex={card.zIndex}
       onMouseDown={onMouseDown}
       onTouchStart={onMouseDown}
     >
       <ExpandButton 
         className="expand-button"
         onClick={toggleExpand}
-        isExpanded={isExpanded}
+        $isExpanded={isExpanded}
         title={isExpanded ? "Collapse card" : "Expand card"}
       >
         {isExpanded ? '▼' : '▶'}
@@ -84,18 +84,18 @@ const RecipeCard = ({
       <NotesButton
         className="notes-button"
         onClick={toggleNotes}
-        hasNote={!!localNote}
+        $hasNote={!!localNote}
         title="Add/view notes"
       >
         💬
       </NotesButton>
       
       <RecipeCardWrapper 
-        isFlipped={isFlipped && !isExpanded}
-        isExpanded={isExpanded}
-        pinColor={card.pinColor}
-        pinTop={card.pinTop}
-        pinLeft={card.pinLeft}
+        $isFlipped={isFlipped && !isExpanded}
+        $isExpanded={isExpanded}
+        $pinColor={card.pinColor}
+        $pinTop={card.pinTop}
+        $pinLeft={card.pinLeft}
       >
         {!isExpanded ? (
           <>
@@ -119,7 +119,7 @@ const RecipeCard = ({
               )}
             </CardSide>
             
-            <CardSide back>
+            <CardSide $back>
               <CardBack
                 title={card.title}
                 ingredients={card.ingredients}
