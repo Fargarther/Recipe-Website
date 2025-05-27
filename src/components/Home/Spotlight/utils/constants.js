@@ -1,7 +1,7 @@
 // src/components/Home/Spotlight/utils/constants.js
 export const CARD_DIMENSIONS = {
-  width: 250,
-  height: 150
+  width: 325,  // Increased by 30% from 250
+  height: 195  // Increased by 30% from 150
 };
 
 export const BOARD_DIMENSIONS = {

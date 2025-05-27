@@ -43,7 +43,7 @@ const useCardManagement = (recipeData) => {
           zIndex: index + 1,
           rotate: getRandomRotation(),
           pinColor: getPinColor(),
-          pinTop: `${8 + Math.random() * 15}px`,
+          pinTop: `${10 + Math.random() * 20}px`,
           pinLeft: `${10 + Math.random() * 80}%`
         };
       });
@@ -100,7 +100,7 @@ const useCardManagement = (recipeData) => {
       zIndex: Math.max(...cards.map(c => c.zIndex), 0) + 1,
       rotate: getRandomRotation(),
       pinColor: getPinColor(),
-      pinTop: `${8 + Math.random() * 15}px`,
+      pinTop: `${10 + Math.random() * 20}px`,
       pinLeft: `${10 + Math.random() * 80}%`
     };
     
@@ -135,7 +135,7 @@ const useCardManagement = (recipeData) => {
       prevCards.map(card => ({
         ...card,
         rotate: getRandomRotation(),
-        pinTop: `${8 + Math.random() * 15}px`,
+        pinTop: `${10 + Math.random() * 20}px`,
         pinLeft: `${10 + Math.random() * 80}%`
       }))
     );

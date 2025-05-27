@@ -5,14 +5,14 @@ import styled from 'styled-components';
 const RatingContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 8px;
-  gap: 2px;
+  margin-top: 10px;
+  gap: 3px;
 `;
 
 const Star = styled.span`
   color: ${props => props.$filled ? '#b38c42' : '#d1c6a8'};
   cursor: pointer;
-  font-size: 12px;
+  font-size: 16px;
   transition: color 0.2s;
   
   &:hover {
@@ -22,9 +22,9 @@ const Star = styled.span`
 
 const RatingText = styled.span`
   font-family: 'Courier New', monospace;
-  font-size: 9px;
+  font-size: 12px;
   color: #8a7248;
-  margin-left: 6px;
+  margin-left: 8px;
   font-style: italic;
 `;
 

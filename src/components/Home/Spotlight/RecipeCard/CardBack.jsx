@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 const CardTitle = styled.h3`
   font-family: 'Courier New', monospace;
-  font-size: 14px;
-  margin: 0 0 8px;
+  font-size: 18px;
+  margin: 0 0 10px;
   color: #59483b;
   font-weight: bold;
   letter-spacing: -0.5px;
@@ -13,18 +13,18 @@ const CardTitle = styled.h3`
 
 const RecipeDetails = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: #59483b;
   line-height: 1.4;
   position: relative;
   z-index: 1;
-  margin-bottom: 20px;
+  margin-bottom: 26px;
 `;
 
 const SectionTitle = styled.h4`
   font-family: 'Courier New', monospace;
-  font-size: 11px;
-  margin: 5px 0 3px;
+  font-size: 14px;
+  margin: 6px 0 4px;
   color: #59483b;
   text-decoration: underline;
   text-decoration-color: #8a7248;
@@ -33,10 +33,10 @@ const SectionTitle = styled.h4`
 `;
 
 const RecipeIngredient = styled.li`
-  margin-bottom: 3px;
-  font-size: 10px;
+  margin-bottom: 4px;
+  font-size: 13px;
   position: relative;
-  padding-left: 12px;
+  padding-left: 16px;
   
   &:before {
     content: '•';
@@ -47,8 +47,8 @@ const RecipeIngredient = styled.li`
 `;
 
 const RecipeStep = styled.li`
-  margin-bottom: 5px;
-  font-size: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
   line-height: 1.4;
 `;
 

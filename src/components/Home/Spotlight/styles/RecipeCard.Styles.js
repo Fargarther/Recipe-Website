@@ -19,9 +19,9 @@ const paperTexture = `
 
 export const CardContainer = styled.div`
   position: absolute;
-  width: ${props => props.$isExpanded ? '350px' : '250px'}; 
-  height: ${props => props.$isExpanded ? 'auto' : '150px'};
-  min-height: ${props => props.$isExpanded ? '300px' : '150px'};
+  width: ${props => props.$isExpanded ? '455px' : '325px'}; 
+  height: ${props => props.$isExpanded ? 'auto' : '195px'};
+  min-height: ${props => props.$isExpanded ? '390px' : '195px'};
   left: ${props => props.$x}px;
   top: ${props => props.$y}px;
   transform: ${props => `rotate(${props.$rotate}deg)`};
@@ -62,11 +62,11 @@ export const RecipeCardWrapper = styled.div`
   &:after {
     content: '';
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background-color: ${props => props.$pinColor || '#b54b35'};
     border-radius: 50%;
-    top: ${props => props.$pinTop || '8px'};
+    top: ${props => props.$pinTop || '10px'};
     left: ${props => props.$pinLeft || '50%'};
     transform: translateX(-50%);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -85,7 +85,7 @@ export const CardSide = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: 16px;
   transform: ${props => props.$back ? 'rotateY(180deg)' : 'rotateY(0deg)'};
   overflow-y: ${props => props.$back ? 'auto' : 'visible'};
   will-change: transform;
@@ -121,16 +121,16 @@ export const CardSide = styled.div`
 
 export const FlipIndicator = styled.div`
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
+  bottom: 10px;
+  right: 10px;
+  width: 39px;
+  height: 39px;
+  border-radius: 20px;
   background-color: rgba(200, 180, 120, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 18px;
   color: #8a7248;
   cursor: pointer;
   border: 1px solid rgba(200, 180, 120, 0.5);
@@ -150,11 +150,11 @@ export const FlipIndicator = styled.div`
 
 export const ExpandButton = styled.button`
   position: absolute;
-  left: -10px;
+  left: -13px;
   top: 50%;
   transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: ${props => props.$isExpanded ? '#8a7248' : 'rgba(200, 180, 120, 0.8)'};
   color: ${props => props.$isExpanded ? '#fff' : '#59483b'};
@@ -162,7 +162,7 @@ export const ExpandButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   z-index: 11;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -181,11 +181,11 @@ export const ExpandButton = styled.button`
 
 export const NotesButton = styled.button`
   position: absolute;
-  right: -10px;
+  right: -13px;
   top: 50%;
   transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: ${props => props.$hasNote ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
   color: ${props => props.$hasNote ? '#fff' : '#59483b'};
@@ -193,7 +193,7 @@ export const NotesButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 18px;
   cursor: pointer;
   z-index: 11;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -212,16 +212,16 @@ export const NotesButton = styled.button`
 
 export const NotesArea = styled.textarea`
   position: absolute;
-  bottom: -80px;
+  bottom: -105px;
   left: 0;
   right: 0;
-  height: 70px;
-  padding: 8px;
+  height: 90px;
+  padding: 10px;
   background-color: #fffef5;
   border: 1px solid rgba(200, 180, 120, 0.5);
   border-radius: 4px;
   font-family: 'Courier New', monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: #59483b;
   resize: none;
   z-index: 12;
@@ -239,7 +239,7 @@ export const ExpandedContent = styled.div`
   ${paperTexture}
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  padding: 16px;
+  padding: 21px;
   
   &:before {
     content: '';

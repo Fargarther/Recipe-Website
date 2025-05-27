@@ -5,8 +5,8 @@ import RatingSystem from './RatingSystem';
 
 const CardTitle = styled.h3`
   font-family: 'Courier New', monospace;
-  font-size: ${props => props.$expanded ? '16px' : '14px'};
-  margin: 0 0 8px;
+  font-size: ${props => props.$expanded ? '21px' : '18px'};
+  margin: 0 0 10px;
   color: #59483b;
   font-weight: bold;
   letter-spacing: -0.5px;
@@ -15,15 +15,15 @@ const CardTitle = styled.h3`
 
 const CardMeta = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: ${props => props.$expanded ? '11px' : '10px'};
-  margin-bottom: 10px;
+  font-size: ${props => props.$expanded ? '14px' : '13px'};
+  margin-bottom: 13px;
   color: #8a7248;
   font-style: italic;
 `;
 
 const CardContent = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: ${props => props.$expanded ? '12px' : '11px'};
+  font-size: ${props => props.$expanded ? '16px' : '14px'};
   color: #5d4e3f;
   flex: 1;
   line-height: 1.4;
