@@ -5,17 +5,17 @@ import RatingSystem from './RatingSystem';
 
 const CardTitle = styled.h3`
   font-family: 'Courier New', monospace;
-  font-size: 14px;
+  font-size: ${props => props.expanded ? '16px' : '14px'};
   margin: 0 0 8px;
   color: #59483b;
   font-weight: bold;
   letter-spacing: -0.5px;
-  transform: rotate(-0.5deg);
+  transform: ${props => props.expanded ? 'none' : 'rotate(-0.5deg)'};
 `;
 
 const CardMeta = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: 10px;
+  font-size: ${props => props.expanded ? '11px' : '10px'};
   margin-bottom: 10px;
   color: #8a7248;
   font-style: italic;
@@ -23,20 +23,27 @@ const CardMeta = styled.div`
 
 const CardContent = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: 11px;
+  font-size: ${props => props.expanded ? '12px' : '11px'};
   color: #5d4e3f;
   flex: 1;
   line-height: 1.4;
   overflow: hidden;
-  transform: rotate(-0.5deg);
+  transform: ${props => props.expanded ? 'none' : 'rotate(-0.5deg)'};
+  
+  /* Multi-line ellipsis for collapsed view */
+  ${props => !props.expanded && `
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  `}
 `;
 
-const CardFront = ({ title, category, time, text, rating, onRatingChange }) => {
+const CardFront = ({ title, category, time, text, rating, onRatingChange, expanded = false }) => {
   return (
     <>
-      <CardTitle>{title}</CardTitle>
-      <CardMeta>{category} • {time}</CardMeta>
-      <CardContent>{text}</CardContent>
+      <CardTitle expanded={expanded}>{title}</CardTitle>
+      <CardMeta expanded={expanded}>{category} • {time}</CardMeta>
+      <CardContent expanded={expanded}>{text}</CardContent>
       <RatingSystem rating={rating} onRate={onRatingChange} />
     </>
   );

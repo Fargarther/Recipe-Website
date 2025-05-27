@@ -1,8 +1,8 @@
-// src/components/Home/Spotlight/index.jsx
+// src/components/Home/Spotlight/Index.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import BulletinBoard from './BulletinBoard';
-import RecipeCard from './RecipeCard/Index';  // or just './RecipeCard' if index.jsx is default
+import RecipeCard from './RecipeCard/Index';
 import ControlBar from './ControlBar';
 import useDragAndDrop from './hooks/useDragAndDrop';
 import useCardManagement from './hooks/useCardManagement';
@@ -32,7 +32,9 @@ function Spotlight() {
     cards,
     setCards,
     ratings,
+    notes,
     handleRating,
+    handleNoteChange,
     addNewCard,
     clearAllCards,
     updateCardRotations
@@ -103,8 +105,10 @@ function Spotlight() {
             isDragging={activeCard === card.id}
             isNew={newCardIds.has(card.id)}
             rating={ratings[card.id] || 0}
+            note={notes[card.id] || ''}
             onMouseDown={(e) => handleCardMouseDown(e, card.id)}
             onRatingChange={(value) => handleRating(card.id, card.recipeId, value)}
+            onNoteChange={(text) => handleNoteChange(card.id, card.recipeId, text)}
           />
         ))}
       </BulletinBoard>

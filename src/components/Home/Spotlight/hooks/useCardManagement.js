@@ -6,18 +6,21 @@ const useCardManagement = (recipeData) => {
   const [cards, setCards] = useState([]);
   const [nextId, setNextId] = useState(1);
   const [ratings, setRatings] = useState({});
+  const [notes, setNotes] = useState({});
 
   // Initialize cards
   useState(() => {
     if (cards.length === 0 && recipeData.length > 0) {
       const initialCards = recipeData.slice(0, 5).map((recipe, index) => {
+        const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+        
         return {
           id: index + 1,
           recipeId: recipe.id,
           title: recipe.title,
           category: recipe.category,
           time: recipe.time,
-          text: `${recipe.title} is a ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare.`,
+          text: detailedText,
           ingredients: recipe.ingredients || [
             "2 cups all-purpose flour", 
             "1 cup granulated sugar", 
@@ -48,13 +51,18 @@ const useCardManagement = (recipeData) => {
       setCards(initialCards);
       setNextId(initialCards.length + 1);
       
-      // Load ratings
+      // Load ratings and notes
       const savedRatings = {};
+      const savedNotes = {};
       initialCards.forEach(card => {
         const savedRating = localStorage.getItem(`bulletin_rating_${card.recipeId}`);
         savedRatings[card.id] = savedRating ? parseInt(savedRating) : 0;
+        
+        const savedNote = localStorage.getItem(`bulletin_note_${card.recipeId}`);
+        savedNotes[card.id] = savedNote || '';
       });
       setRatings(savedRatings);
+      setNotes(savedNotes);
     }
   });
 
@@ -66,17 +74,27 @@ const useCardManagement = (recipeData) => {
     }));
   }, []);
 
+  const handleNoteChange = useCallback((cardId, recipeId, text) => {
+    localStorage.setItem(`bulletin_note_${recipeId}`, text);
+    setNotes(prevNotes => ({
+      ...prevNotes,
+      [cardId]: text
+    }));
+  }, []);
+
   const addNewCard = useCallback(() => {
     if (recipeData.length < nextId) return null;
     
     const recipe = recipeData[nextId - 1];
+    const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+    
     const newCard = {
       id: nextId,
       recipeId: recipe.id,
       title: recipe.title,
       category: recipe.category,
       time: recipe.time,
-      text: `${recipe.title} is a ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare.`,
+      text: detailedText,
       ingredients: recipe.ingredients || ["Default ingredients..."],
       instructions: recipe.instructions || ["Default instructions..."],
       zIndex: Math.max(...cards.map(c => c.zIndex), 0) + 1,
@@ -94,6 +112,12 @@ const useCardManagement = (recipeData) => {
       [nextId]: savedRating ? parseInt(savedRating) : 0
     }));
     
+    const savedNote = localStorage.getItem(`bulletin_note_${recipe.id}`);
+    setNotes(prevNotes => ({
+      ...prevNotes,
+      [nextId]: savedNote || ''
+    }));
+    
     setNextId(prevId => prevId + 1);
     
     return newCard;
@@ -102,6 +126,7 @@ const useCardManagement = (recipeData) => {
   const clearAllCards = useCallback(() => {
     setCards([]);
     setRatings({});
+    setNotes({});
     setNextId(1);
   }, []);
 
@@ -120,7 +145,9 @@ const useCardManagement = (recipeData) => {
     cards,
     setCards,
     ratings,
+    notes,
     handleRating,
+    handleNoteChange,
     addNewCard,
     clearAllCards,
     updateCardRotations

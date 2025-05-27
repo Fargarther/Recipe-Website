@@ -33,7 +33,9 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     
     // Don't initiate drag if clicking on interactive elements
     if (e.target.classList.contains('star') || 
-        e.target.classList.contains('flip-indicator')) {
+        e.target.classList.contains('flip-indicator') ||
+        e.target.classList.contains('expand-button') ||
+        e.target.classList.contains('notes-button')) {
       return;
     }
     

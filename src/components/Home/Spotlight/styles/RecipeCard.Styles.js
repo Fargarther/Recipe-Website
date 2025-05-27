@@ -1,7 +1,8 @@
 // src/components/Home/Spotlight/styles/RecipeCard.styles.js
 import styled from 'styled-components';
 
-export const paperTexture = `
+// Paper texture for the aged look
+const paperTexture = `
   background-image: 
     repeating-linear-gradient(
       120deg, 
@@ -18,13 +19,14 @@ export const paperTexture = `
 
 export const CardContainer = styled.div`
   position: absolute;
-  width: 250px; 
-  height: 150px;
+  width: ${props => props.isExpanded ? '350px' : '250px'}; 
+  height: ${props => props.isExpanded ? 'auto' : '150px'};
+  min-height: ${props => props.isExpanded ? '300px' : '150px'};
   left: ${props => props.x}px;
   top: ${props => props.y}px;
   transform: ${props => `rotate(${props.rotate}deg)`};
   transform-origin: center center;
-  transition: ${props => props.isDragging ? 'none' : 'all 0.3s'};
+  transition: ${props => props.isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
   z-index: ${props => props.isDragging ? 100 : props.zIndex};
   perspective: 1500px;
   cursor: ${props => props.isDragging ? 'grabbing' : 'grab'};
@@ -51,7 +53,7 @@ export const CardContainer = styled.div`
 export const RecipeCardWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  height: ${props => props.isExpanded ? 'auto' : '100%'};
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.455, 0.03, 0.515, 1.55);
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
@@ -143,5 +145,127 @@ export const FlipIndicator = styled.div`
   
   &:active {
     transform: scale(0.95);
+  }
+`;
+
+export const ExpandButton = styled.button`
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: ${props => props.isExpanded ? '#8a7248' : 'rgba(200, 180, 120, 0.8)'};
+  color: ${props => props.isExpanded ? '#fff' : '#59483b'};
+  border: 2px solid #8a7248;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 11;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background-color: #8a7248;
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+`;
+
+export const NotesButton = styled.button`
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: ${props => props.hasNote ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
+  color: ${props => props.hasNote ? '#fff' : '#59483b'};
+  border: 2px solid #b38c42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 11;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background-color: #b38c42;
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+`;
+
+export const NotesArea = styled.textarea`
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 70px;
+  padding: 8px;
+  background-color: #fffef5;
+  border: 1px solid rgba(200, 180, 120, 0.5);
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: #59483b;
+  resize: none;
+  z-index: 12;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  &:focus {
+    outline: none;
+    border-color: #b38c42;
+  }
+`;
+
+export const ExpandedContent = styled.div`
+  width: 100%;
+  background-color: #f5f0dc;
+  ${paperTexture}
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid rgba(210, 190, 150, 0.8);
+    border-radius: 4px;
+    box-shadow: inset 0 0 30px rgba(200, 180, 120, 0.15);
+    pointer-events: none;
+  }
+`;
+
+export const ExpandedSection = styled.div`
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(200, 180, 120, 0.3);
+  
+  h4 {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #59483b;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 `;
