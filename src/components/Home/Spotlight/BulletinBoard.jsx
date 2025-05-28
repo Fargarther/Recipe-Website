@@ -2,9 +2,9 @@
 import React, { forwardRef } from 'react';
 import { BulletinBoardContainer, BoardFrame } from './styles/BulletinBoard.styles';
 
-const BulletinBoard = forwardRef(({ children }, ref) => {
+const BulletinBoard = forwardRef(({ children, hasExpandedCard }, ref) => {
   return (
-    <BulletinBoardContainer ref={ref}>
+    <BulletinBoardContainer ref={ref} $hasExpandedCard={hasExpandedCard}>
       <BoardFrame />
       {children}
     </BulletinBoardContainer>

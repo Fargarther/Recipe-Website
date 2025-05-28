@@ -26,6 +26,7 @@ const SpotlightSection = styled.section`
 function Spotlight() {
   const boardRef = useRef(null);
   const [newCardIds, setNewCardIds] = useState(new Set());
+  const [expandedCards, setExpandedCards] = useState(new Set());
   
   // Use custom hooks
   const {
@@ -47,6 +48,19 @@ function Spotlight() {
     shufflePositions,
     setCardPositions
   } = useDragAndDrop(cards, setCards, boardRef);
+  
+  // Handle card expansion state
+  const handleCardExpand = (cardId, isExpanded) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (isExpanded) {
+        newSet.add(cardId);
+      } else {
+        newSet.delete(cardId);
+      }
+      return newSet;
+    });
+  };
   
   // Handle adding a new card
   const handleAddCard = () => {
@@ -84,6 +98,7 @@ function Spotlight() {
   const handleClear = () => {
     clearAllCards();
     setNewCardIds(new Set());
+    setExpandedCards(new Set());
   };
   
   return (
@@ -96,7 +111,7 @@ function Spotlight() {
         onClearCards={handleClear}
       />
       
-      <BulletinBoard ref={boardRef}>
+      <BulletinBoard ref={boardRef} hasExpandedCard={expandedCards.size > 0}>
         {cards.map(card => (
           <RecipeCard
             key={card.id}
@@ -109,6 +124,7 @@ function Spotlight() {
             onMouseDown={(e) => handleCardMouseDown(e, card.id)}
             onRatingChange={(value) => handleRating(card.id, card.recipeId, value)}
             onNoteChange={(text) => handleNoteChange(card.id, card.recipeId, text)}
+            onExpand={(isExpanded) => handleCardExpand(card.id, isExpanded)}
           />
         ))}
       </BulletinBoard>

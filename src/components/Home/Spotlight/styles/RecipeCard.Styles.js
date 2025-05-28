@@ -27,7 +27,7 @@ export const CardContainer = styled.div`
   transform: ${props => `rotate(${props.$rotate}deg)`};
   transform-origin: center center;
   transition: ${props => props.$isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
-  z-index: ${props => props.$isDragging ? 100 : props.$zIndex};
+  z-index: ${props => props.$isExpanded ? 1000 : props.$isDragging ? 100 : props.$zIndex};
   perspective: 1500px;
   cursor: ${props => props.$isDragging ? 'grabbing' : 'grab'};
   

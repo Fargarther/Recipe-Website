@@ -25,6 +25,7 @@ const RecipeCard = ({
   onMouseDown,
   onRatingChange,
   onNoteChange,
+  onExpand,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -39,11 +40,16 @@ const RecipeCard = ({
   
   const toggleExpand = (e) => {
     e.stopPropagation();
-    setIsExpanded(!isExpanded);
+    const newExpandedState = !isExpanded;
+    setIsExpanded(newExpandedState);
     // When expanding, close notes and flip to front if needed
-    if (!isExpanded) {
+    if (newExpandedState) {
       setShowNotes(false);
       setIsFlipped(false);
+    }
+    // Notify parent component of expansion state change
+    if (onExpand) {
+      onExpand(newExpandedState);
     }
   };
   
