@@ -21,6 +21,8 @@ const useCardManagement = (recipeData) => {
           category: recipe.category,
           time: recipe.time,
           text: detailedText,
+          image: recipe.image || '/api/placeholder/300/300',
+          imageAlt: `${recipe.title} - finished dish`,
           ingredients: recipe.ingredients || [
             "2 cups all-purpose flour", 
             "1 cup granulated sugar", 
@@ -95,6 +97,8 @@ const useCardManagement = (recipeData) => {
       category: recipe.category,
       time: recipe.time,
       text: detailedText,
+      image: recipe.image || '/api/placeholder/300/300',
+      imageAlt: `${recipe.title} - finished dish`,
       ingredients: recipe.ingredients || ["Default ingredients..."],
       instructions: recipe.instructions || ["Default instructions..."],
       zIndex: Math.max(...cards.map(c => c.zIndex), 0) + 1,

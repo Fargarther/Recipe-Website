@@ -2,77 +2,60 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const CardTitle = styled.h3`
-  font-family: 'Courier New', monospace;
-  font-size: 18px;
-  margin: 0 0 10px;
-  color: #59483b;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-`;
-
-const RecipeDetails = styled.div`
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-  color: #59483b;
-  line-height: 1.4;
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  z-index: 1;
-  margin-bottom: 26px;
+  overflow: hidden;
 `;
 
-const SectionTitle = styled.h4`
+const RecipeImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+`;
+
+const ImageOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  padding: 12px;
+  color: white;
+`;
+
+const ImageTitle = styled.h4`
   font-family: 'Courier New', monospace;
   font-size: 14px;
-  margin: 6px 0 4px;
-  color: #59483b;
-  text-decoration: underline;
-  text-decoration-color: #8a7248;
-  text-decoration-thickness: 1px;
-  letter-spacing: -0.5px;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 `;
 
-const RecipeIngredient = styled.li`
-  margin-bottom: 4px;
-  font-size: 13px;
-  position: relative;
-  padding-left: 16px;
-  
-  &:before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: #8a7248;
-  }
+const ImageCaption = styled.p`
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  margin: 4px 0 0;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 `;
 
-const RecipeStep = styled.li`
-  margin-bottom: 6px;
-  font-size: 13px;
-  line-height: 1.4;
-`;
-
-const CardBack = ({ title, ingredients, instructions }) => {
+const CardBack = ({ title, image, imageAlt, category }) => {
   return (
-    <>
-      <CardTitle>{title}</CardTitle>
-      
-      <RecipeDetails>
-        <SectionTitle>Ingredients:</SectionTitle>
-        <ul>
-          {Array.isArray(ingredients) && ingredients.map((ingredient, i) => (
-            <RecipeIngredient key={i}>{ingredient}</RecipeIngredient>
-          ))}
-        </ul>
-        
-        <SectionTitle>Instructions:</SectionTitle>
-        <ol>
-          {Array.isArray(instructions) && instructions.map((step, i) => (
-            <RecipeStep key={i}>{step}</RecipeStep>
-          ))}
-        </ol>
-      </RecipeDetails>
-    </>
+    <ImageContainer>
+      <RecipeImage 
+        src={image || '/api/placeholder/300/300'} 
+        alt={imageAlt || title}
+      />
+      <ImageOverlay>
+        <ImageTitle>{title}</ImageTitle>
+        <ImageCaption>{category} Recipe</ImageCaption>
+      </ImageOverlay>
+    </ImageContainer>
   );
 };
 

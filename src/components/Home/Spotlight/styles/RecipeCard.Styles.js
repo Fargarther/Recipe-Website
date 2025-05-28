@@ -146,6 +146,11 @@ export const FlipIndicator = styled.div`
   &:active {
     transform: scale(0.95);
   }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export const ExpandButton = styled.button`

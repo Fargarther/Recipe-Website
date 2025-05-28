@@ -15,6 +15,24 @@ import CardFront from './CardFront';
 import CardBack from './CardBack';
 import { playFlipSound } from '../utils/helpers';
 
+// Camera icon component
+const CameraIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+    <circle cx="12" cy="13" r="4"></circle>
+  </svg>
+);
+
 const RecipeCard = ({
   card,
   position,
@@ -117,10 +135,10 @@ const RecipeCard = ({
               {!showNotes && (
                 <FlipIndicator 
                   className="flip-indicator" 
-                  title="Flip card to see recipe"
+                  title="View recipe photo"
                   onClick={toggleFlip}
                 >
-                  ↻
+                  <CameraIcon />
                 </FlipIndicator>
               )}
             </CardSide>
@@ -128,15 +146,16 @@ const RecipeCard = ({
             <CardSide $back>
               <CardBack
                 title={card.title}
-                ingredients={card.ingredients}
-                instructions={card.instructions}
+                image={card.image}
+                imageAlt={card.imageAlt}
+                category={card.category}
               />
               <FlipIndicator 
                 className="flip-indicator"
-                title="Flip card to front"
+                title="Back to recipe details"
                 onClick={toggleFlip}
               >
-                ↻
+                <CameraIcon />
               </FlipIndicator>
             </CardSide>
           </>
@@ -152,12 +171,42 @@ const RecipeCard = ({
               expanded
             />
             <ExpandedSection>
-              <h4>Full Recipe Details</h4>
-              <CardBack
-                title=""
-                ingredients={card.ingredients}
-                instructions={card.instructions}
-              />
+              <h4>Ingredients</h4>
+              <ul>
+                {Array.isArray(card.ingredients) && card.ingredients.map((ingredient, i) => (
+                  <li key={i} style={{
+                    marginBottom: '4px',
+                    fontSize: '14px',
+                    paddingLeft: '16px',
+                    position: 'relative',
+                    fontFamily: 'Courier New, monospace',
+                    color: '#59483b'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#8a7248'
+                    }}>•</span>
+                    {ingredient}
+                  </li>
+                ))}
+              </ul>
+            </ExpandedSection>
+            <ExpandedSection>
+              <h4>Instructions</h4>
+              <ol style={{ paddingLeft: '20px' }}>
+                {Array.isArray(card.instructions) && card.instructions.map((step, i) => (
+                  <li key={i} style={{
+                    marginBottom: '6px',
+                    fontSize: '14px',
+                    lineHeight: '1.4',
+                    fontFamily: 'Courier New, monospace',
+                    color: '#59483b'
+                  }}>
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </ExpandedSection>
           </ExpandedContent>
         )}
