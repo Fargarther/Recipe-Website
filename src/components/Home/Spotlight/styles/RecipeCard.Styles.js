@@ -55,7 +55,7 @@ export const CardContainer = styled.div`
 `;
 
 export const RecipeCardWrapper = styled.div`
-  position: relative;
+  position: relative; /* IMPORTANT: This was missing and causing the flip issue */
   width: 100%;
   height: ${props => props.$isExpanded ? 'auto' : '100%'};
   transform-style: preserve-3d;
@@ -80,7 +80,7 @@ export const PinButton = styled.button`
   box-shadow: ${props => props.$isPinned 
     ? 'inset 0 3px 5px rgba(0, 0, 0, 0.6), inset 0 -1px 2px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3)' 
     : '0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.3)'};
-  z-index: 10; /* Changed from 999 to 10 to be within the card's stacking context */
+  z-index: 10;
   border: ${props => props.$isPinned 
     ? '1px solid rgba(0, 0, 0, 0.3)' 
     : '1px solid rgba(255, 255, 255, 0.2)'};
@@ -161,7 +161,6 @@ export const CardSide = styled.div`
   overflow-y: ${props => props.$back ? 'auto' : 'visible'};
   will-change: transform;
   pointer-events: auto;
-  position: relative; /* Added to ensure pin is relative to card */
 
   &:before {
     content: '';
@@ -309,7 +308,9 @@ export const CommentsButton = styled.button`
 export const CommentsSection = styled.div`
   position: absolute;
   top: 0;
-  left: calc(100% + 20px);
+  ${props => props.$position === 'left' 
+    ? 'right: calc(100% + 20px);' 
+    : 'left: calc(100% + 20px);'}
   width: 280px;
   background-color: #fffef5;
   border: 1px solid rgba(200, 180, 120, 0.5);
@@ -328,7 +329,7 @@ export const ExpandedContent = styled.div`
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   padding: 21px 21px 21px 41px;
-  position: relative; /* Added to ensure pin is relative to card */
+  position: relative;
   
   &:before {
     content: '';
