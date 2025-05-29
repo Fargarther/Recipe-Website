@@ -6,13 +6,14 @@ import {
   CardSide, 
   FlipIndicator,
   ExpandButton,
-  NotesButton,
-  NotesArea,
+  CommentsButton,
+  CommentsSection,
   ExpandedContent,
   ExpandedSection
 } from '../styles/RecipeCard.styles';
 import CardFront from './CardFront';
 import CardBack from './CardBack';
+import Comments from './Comments';
 import { playFlipSound } from '../utils/helpers';
 
 // Camera icon component
@@ -39,16 +40,15 @@ const RecipeCard = ({
   isDragging,
   isNew,
   rating,
-  note,
+  comments,
   onMouseDown,
   onRatingChange,
-  onNoteChange,
+  onAddComment,
   onExpand,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [showNotes, setShowNotes] = useState(false);
-  const [localNote, setLocalNote] = useState(note || '');
+  const [showComments, setShowComments] = useState(false);
   
   const toggleFlip = (e) => {
     e.stopPropagation();
@@ -60,9 +60,9 @@ const RecipeCard = ({
     e.stopPropagation();
     const newExpandedState = !isExpanded;
     setIsExpanded(newExpandedState);
-    // When expanding, close notes and flip to front if needed
+    // When expanding, close comments and flip to front if needed
     if (newExpandedState) {
-      setShowNotes(false);
+      setShowComments(false);
       setIsFlipped(false);
     }
     // Notify parent component of expansion state change
@@ -71,18 +71,18 @@ const RecipeCard = ({
     }
   };
   
-  const toggleNotes = (e) => {
+  const toggleComments = (e) => {
     e.stopPropagation();
-    setShowNotes(!showNotes);
+    setShowComments(!showComments);
   };
   
-  const handleNoteChange = (e) => {
-    const newNote = e.target.value;
-    setLocalNote(newNote);
-    if (onNoteChange) {
-      onNoteChange(newNote);
+  const handleAddComment = (comment) => {
+    if (onAddComment) {
+      onAddComment(comment);
     }
   };
+  
+  const commentCount = comments?.length || 0;
   
   return (
     <CardContainer
@@ -105,14 +105,14 @@ const RecipeCard = ({
         {isExpanded ? '▼' : '▶'}
       </ExpandButton>
       
-      <NotesButton
-        className="notes-button"
-        onClick={toggleNotes}
-        $hasNote={!!localNote}
-        title="Add/view notes"
+      <CommentsButton
+        className="comments-button"
+        onClick={toggleComments}
+        $hasComments={commentCount > 0}
+        title="View/add comments"
       >
-        💬
-      </NotesButton>
+        💬 {commentCount > 0 && <span>{commentCount}</span>}
+      </CommentsButton>
       
       <RecipeCardWrapper 
         $isFlipped={isFlipped && !isExpanded}
@@ -132,7 +132,7 @@ const RecipeCard = ({
                 rating={rating}
                 onRatingChange={onRatingChange}
               />
-              {!showNotes && (
+              {!showComments && (
                 <FlipIndicator 
                   className="flip-indicator" 
                   title="View recipe photo"
@@ -212,13 +212,17 @@ const RecipeCard = ({
         )}
       </RecipeCardWrapper>
       
-      {showNotes && (
-        <NotesArea
-          value={localNote}
-          onChange={handleNoteChange}
-          placeholder="Add your notes about this recipe..."
-          onClick={(e) => e.stopPropagation()}
-        />
+      {showComments && (
+        <CommentsSection 
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+        >
+          <Comments
+            comments={comments || []}
+            onAddComment={handleAddComment}
+            recipeTitle={card.title}
+          />
+        </CommentsSection>
       )}
     </CardContainer>
   );

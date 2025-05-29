@@ -33,9 +33,9 @@ function Spotlight() {
     cards,
     setCards,
     ratings,
-    notes,
+    comments,
     handleRating,
-    handleNoteChange,
+    handleAddComment,
     addNewCard,
     clearAllCards,
     updateCardRotations
@@ -120,10 +120,10 @@ function Spotlight() {
             isDragging={activeCard === card.id}
             isNew={newCardIds.has(card.id)}
             rating={ratings[card.id] || 0}
-            note={notes[card.id] || ''}
+            comments={comments[card.id] || []}
             onMouseDown={(e) => handleCardMouseDown(e, card.id)}
             onRatingChange={(value) => handleRating(card.id, card.recipeId, value)}
-            onNoteChange={(text) => handleNoteChange(card.id, card.recipeId, text)}
+            onAddComment={(comment) => handleAddComment(card.id, card.recipeId, comment)}
             onExpand={(isExpanded) => handleCardExpand(card.id, isExpanded)}
           />
         ))}

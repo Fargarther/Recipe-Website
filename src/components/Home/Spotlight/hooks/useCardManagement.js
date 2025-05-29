@@ -6,7 +6,7 @@ const useCardManagement = (recipeData) => {
   const [cards, setCards] = useState([]);
   const [nextId, setNextId] = useState(1);
   const [ratings, setRatings] = useState({});
-  const [notes, setNotes] = useState({});
+  const [comments, setComments] = useState({});
 
   // Initialize cards
   useState(() => {
@@ -53,18 +53,18 @@ const useCardManagement = (recipeData) => {
       setCards(initialCards);
       setNextId(initialCards.length + 1);
       
-      // Load ratings and notes
+      // Load ratings and comments
       const savedRatings = {};
-      const savedNotes = {};
+      const savedComments = {};
       initialCards.forEach(card => {
         const savedRating = localStorage.getItem(`bulletin_rating_${card.recipeId}`);
         savedRatings[card.id] = savedRating ? parseInt(savedRating) : 0;
         
-        const savedNote = localStorage.getItem(`bulletin_note_${card.recipeId}`);
-        savedNotes[card.id] = savedNote || '';
+        const savedCommentsData = localStorage.getItem(`bulletin_comments_${card.recipeId}`);
+        savedComments[card.id] = savedCommentsData ? JSON.parse(savedCommentsData) : [];
       });
       setRatings(savedRatings);
-      setNotes(savedNotes);
+      setComments(savedComments);
     }
   });
 
@@ -76,12 +76,19 @@ const useCardManagement = (recipeData) => {
     }));
   }, []);
 
-  const handleNoteChange = useCallback((cardId, recipeId, text) => {
-    localStorage.setItem(`bulletin_note_${recipeId}`, text);
-    setNotes(prevNotes => ({
-      ...prevNotes,
-      [cardId]: text
-    }));
+  const handleAddComment = useCallback((cardId, recipeId, comment) => {
+    setComments(prevComments => {
+      const cardComments = prevComments[cardId] || [];
+      const updatedComments = [...cardComments, comment];
+      
+      // Save to localStorage
+      localStorage.setItem(`bulletin_comments_${recipeId}`, JSON.stringify(updatedComments));
+      
+      return {
+        ...prevComments,
+        [cardId]: updatedComments
+      };
+    });
   }, []);
 
   const addNewCard = useCallback(() => {
@@ -116,10 +123,10 @@ const useCardManagement = (recipeData) => {
       [nextId]: savedRating ? parseInt(savedRating) : 0
     }));
     
-    const savedNote = localStorage.getItem(`bulletin_note_${recipe.id}`);
-    setNotes(prevNotes => ({
-      ...prevNotes,
-      [nextId]: savedNote || ''
+    const savedComments = localStorage.getItem(`bulletin_comments_${recipe.id}`);
+    setComments(prevComments => ({
+      ...prevComments,
+      [nextId]: savedComments ? JSON.parse(savedComments) : []
     }));
     
     setNextId(prevId => prevId + 1);
@@ -130,7 +137,7 @@ const useCardManagement = (recipeData) => {
   const clearAllCards = useCallback(() => {
     setCards([]);
     setRatings({});
-    setNotes({});
+    setComments({});
     setNextId(1);
   }, []);
 
@@ -149,9 +156,9 @@ const useCardManagement = (recipeData) => {
     cards,
     setCards,
     ratings,
-    notes,
+    comments,
     handleRating,
-    handleNoteChange,
+    handleAddComment,
     addNewCard,
     clearAllCards,
     updateCardRotations

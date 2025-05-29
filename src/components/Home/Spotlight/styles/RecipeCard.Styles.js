@@ -85,7 +85,7 @@ export const CardSide = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 16px 16px 16px 36px;
   transform: ${props => props.$back ? 'rotateY(180deg)' : 'rotateY(0deg)'};
   overflow-y: ${props => props.$back ? 'auto' : 'visible'};
   will-change: transform;
@@ -156,7 +156,7 @@ export const FlipIndicator = styled.div`
 export const ExpandButton = styled.button`
   position: absolute;
   left: -13px;
-  top: 50%;
+  top: 97.5px;
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
@@ -184,16 +184,16 @@ export const ExpandButton = styled.button`
   }
 `;
 
-export const NotesButton = styled.button`
+export const CommentsButton = styled.button`
   position: absolute;
-  right: -13px;
-  top: 50%;
+  left: -13px;
+  top: 145px;
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: ${props => props.$hasNote ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
-  color: ${props => props.$hasNote ? '#fff' : '#59483b'};
+  background-color: ${props => props.$hasComments ? '#b38c42' : 'rgba(200, 180, 120, 0.8)'};
+  color: ${props => props.$hasComments ? '#fff' : '#59483b'};
   border: 2px solid #b38c42;
   display: flex;
   align-items: center;
@@ -203,6 +203,24 @@ export const NotesButton = styled.button`
   z-index: 11;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  
+  span {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e76f51;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
   
   &:hover {
     background-color: #b38c42;
@@ -215,27 +233,19 @@ export const NotesButton = styled.button`
   }
 `;
 
-export const NotesArea = styled.textarea`
+export const CommentsSection = styled.div`
   position: absolute;
-  bottom: -105px;
-  left: 0;
-  right: 0;
-  height: 90px;
-  padding: 10px;
+  top: 0;
+  left: calc(100% + 20px);
+  width: 280px;
   background-color: #fffef5;
   border: 1px solid rgba(200, 180, 120, 0.5);
   border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-  color: #59483b;
-  resize: none;
-  z-index: 12;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
-  &:focus {
-    outline: none;
-    border-color: #b38c42;
-  }
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-height: 200px;
+  max-height: 400px;
+  pointer-events: all;
 `;
 
 export const ExpandedContent = styled.div`
@@ -244,7 +254,7 @@ export const ExpandedContent = styled.div`
   ${paperTexture}
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  padding: 21px;
+  padding: 21px 21px 21px 41px;
   
   &:before {
     content: '';
