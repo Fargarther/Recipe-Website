@@ -1,5 +1,5 @@
 // src/components/Home/Spotlight/RecipeCard/Index.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   CardContainer, 
   RecipeCardWrapper, 
@@ -43,15 +43,33 @@ const RecipeCard = ({
   rating,
   comments,
   isPinned,
+  boardWidth,
   onMouseDown,
   onRatingChange,
   onAddComment,
   onExpand,
   onPinToggle,
+  onCommentsToggle,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [commentsPosition, setCommentsPosition] = useState('right');
+  
+  // Calculate if comments should appear on left or right
+  useEffect(() => {
+    if (showComments && boardWidth) {
+      // Card width (325px) + margin (13px) + comments width (280px) + gap (20px) + some buffer
+      const totalWidthNeeded = 325 + 13 + 280 + 20 + 50;
+      const spaceOnRight = boardWidth - position.x;
+      
+      if (spaceOnRight < totalWidthNeeded) {
+        setCommentsPosition('left');
+      } else {
+        setCommentsPosition('right');
+      }
+    }
+  }, [showComments, position.x, boardWidth]);
   
   const toggleFlip = (e) => {
     e.stopPropagation();
@@ -80,9 +98,8 @@ const RecipeCard = ({
     e.stopPropagation();
     const newExpandedState = !isExpanded;
     setIsExpanded(newExpandedState);
-    // When expanding, close comments and flip to front if needed
+    // When expanding, only flip to front if needed (keep comments open)
     if (newExpandedState) {
-      setShowComments(false);
       setIsFlipped(false);
     }
     // Notify parent component of expansion state change
@@ -93,7 +110,12 @@ const RecipeCard = ({
   
   const toggleComments = (e) => {
     e.stopPropagation();
-    setShowComments(!showComments);
+    const newShowComments = !showComments;
+    setShowComments(newShowComments);
+    // Notify parent component when comments are toggled
+    if (onCommentsToggle) {
+      onCommentsToggle(card.id, newShowComments);
+    }
   };
   
   const handleAddComment = (comment) => {
@@ -110,6 +132,7 @@ const RecipeCard = ({
       $isDragging={isDragging}
       $isExpanded={isExpanded}
       $isPinned={isPinned}
+      $showComments={showComments}
       $rotate={card.rotate}
       $x={position.x}
       $y={position.y}
@@ -160,15 +183,13 @@ const RecipeCard = ({
                 rating={rating}
                 onRatingChange={onRatingChange}
               />
-              {!showComments && (
-                <FlipIndicator 
-                  className="flip-indicator" 
-                  title="View recipe photo"
-                  onClick={toggleFlip}
-                >
-                  <CameraIcon />
-                </FlipIndicator>
-              )}
+              <FlipIndicator 
+                className="flip-indicator" 
+                title="View recipe photo"
+                onClick={toggleFlip}
+              >
+                <CameraIcon />
+              </FlipIndicator>
             </CardSide>
             
             <CardSide $back>
@@ -242,6 +263,7 @@ const RecipeCard = ({
       
       {showComments && (
         <CommentsSection 
+          $position={commentsPosition}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >

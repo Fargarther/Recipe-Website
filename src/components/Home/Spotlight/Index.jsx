@@ -36,13 +36,28 @@ document.head.appendChild(style);
 
 function Spotlight() {
   const boardRef = useRef(null);
+  const [boardWidth, setBoardWidth] = useState(0);
   const [newCardIds, setNewCardIds] = useState(new Set());
   const [expandedCards, setExpandedCards] = useState(new Set());
+  const [cardsWithComments, setCardsWithComments] = useState(new Set());
   const [pinnedCards, setPinnedCards] = useState(() => {
     // Load pinned cards from localStorage
     const saved = localStorage.getItem('pinnedCards');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
+  
+  // Update board width on resize
+  useEffect(() => {
+    const updateBoardWidth = () => {
+      if (boardRef.current) {
+        setBoardWidth(boardRef.current.offsetWidth);
+      }
+    };
+    
+    updateBoardWidth();
+    window.addEventListener('resize', updateBoardWidth);
+    return () => window.removeEventListener('resize', updateBoardWidth);
+  }, []);
   
   // Save pinned cards to localStorage whenever they change
   useEffect(() => {
@@ -81,6 +96,29 @@ function Spotlight() {
       }
       return newSet;
     });
+  };
+  
+  // Handle comments toggle
+  const handleCommentsToggle = (cardId, isOpen) => {
+    setCardsWithComments(prev => {
+      const newSet = new Set(prev);
+      if (isOpen) {
+        newSet.add(cardId);
+      } else {
+        newSet.delete(cardId);
+      }
+      return newSet;
+    });
+    
+    // Update z-index for the card with comments
+    if (isOpen) {
+      setCards(prevCards => 
+        prevCards.map(card => ({
+          ...card,
+          zIndex: card.id === cardId ? Math.max(...prevCards.map(c => c.zIndex)) + 100 : card.zIndex
+        }))
+      );
+    }
   };
   
   // Handle pin toggle
@@ -175,6 +213,7 @@ function Spotlight() {
     clearAllCards();
     setNewCardIds(new Set());
     setExpandedCards(new Set());
+    setCardsWithComments(new Set());
     setPinnedCards(new Set());
   };
   
@@ -199,11 +238,13 @@ function Spotlight() {
             isPinned={pinnedCards.has(card.id)}
             rating={ratings[card.id] || 0}
             comments={comments[card.id] || []}
+            boardWidth={boardWidth}
             onMouseDown={(e) => handlePinnedCardMouseDown(e, card.id)}
             onRatingChange={(value) => handleRating(card.id, card.recipeId, value)}
             onAddComment={(comment) => handleAddComment(card.id, card.recipeId, comment)}
             onExpand={(isExpanded) => handleCardExpand(card.id, isExpanded)}
             onPinToggle={handlePinToggle}
+            onCommentsToggle={handleCommentsToggle}
           />
         ))}
       </BulletinBoard>
