@@ -11,7 +11,7 @@ const useCardManagement = (recipeData) => {
   // Initialize cards
   useState(() => {
     if (cards.length === 0 && recipeData.length > 0) {
-      const initialCards = recipeData.slice(0, 5).map((recipe, index) => {
+      const initialCards = recipeData.slice(0, 3).map((recipe, index) => {
         const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
         
         return {

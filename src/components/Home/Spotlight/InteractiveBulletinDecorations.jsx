@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Stickers, { SeasonalStickers } from './decorations/Stickers';
 import PostItNotes, { postItMessages } from './decorations/PostItNotes';
 
-// Add New Item Button
+// Add New Item Button with animated icon
 const AddButton = styled.button`
   position: absolute;
   bottom: 20px;
@@ -12,7 +12,7 @@ const AddButton = styled.button`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: var(--accent);
+  background: ${props => props.$isOpen ? '#e76f51' : 'var(--accent)'};
   color: white;
   border: none;
   cursor: pointer;
@@ -21,11 +21,12 @@ const AddButton = styled.button`
   justify-content: center;
   font-size: 24px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;
+  overflow: hidden;
   
   &:hover {
-    background: var(--accent-dark);
+    background: ${props => props.$isOpen ? '#c85a48' : 'var(--accent-dark)'};
     transform: scale(1.1);
     box-shadow: 0 6px 12px rgba(0,0,0,0.3);
   }
@@ -33,6 +34,14 @@ const AddButton = styled.button`
   &:active {
     transform: scale(0.95);
   }
+`;
+
+// Animated icon inside the button
+const ButtonIcon = styled.span`
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: ${props => props.$isOpen ? 'rotate(45deg)' : 'rotate(0deg)'};
+  font-size: ${props => props.$isOpen ? '28px' : '24px'};
 `;
 
 // Menu for adding items
@@ -116,55 +125,8 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
   });
   
   const [postIts, setPostIts] = useState(() => {
-    const saved = localStorage.getItem('bulletinPostIts');
-    if (saved) return JSON.parse(saved);
-    
-    // Wait for board to be ready
-    if (!boardRef?.current) return [];
-    
-    // Get board dimensions
-    const boardRect = boardRef.current.getBoundingClientRect();
-    const boardWidth = boardRect.width;
-    const boardHeight = boardRect.height;
-    
-    // Generate initial post-its within board boundaries
-    const colors = ['#ffeb3b', '#ffc0cb', '#b8e6b8', '#b3d9ff', '#dda0dd', '#ffcc99', '#ffb3b3', '#c8e6c9'];
-    const initialPostIts = [];
-    const count = 8 + Math.floor(Math.random() * 5); // 8-12 post-its
-    
-    for (let i = 0; i < count; i++) {
-      const message = postItMessages[Math.floor(Math.random() * postItMessages.length)];
-      const noteWidth = 100 + Math.floor(Math.random() * 40);
-      const noteHeight = 80 + Math.floor(Math.random() * 40);
-      
-      // Calculate safe spawn area (with padding from edges)
-      const padding = 50;
-      const maxX = boardWidth - noteWidth - padding;
-      const maxY = boardHeight - noteHeight - padding;
-      
-      initialPostIts.push({
-        id: `postit-${Date.now()}-${i}`,
-        x: padding + Math.random() * Math.max(maxX - padding, 100),
-        y: padding + Math.random() * Math.max(maxY - padding, 100),
-        width: noteWidth,
-        height: noteHeight,
-        rotate: -12 + Math.random() * 24,
-        textRotate: -3 + Math.random() * 6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        text: message.text,
-        font: message.font,
-        style: message.style || 'normal',
-        weight: message.weight || 'normal',
-        fontSize: 13 + Math.floor(Math.random() * 5),
-        falling: false,
-        throwX: 0,
-        throwY: 0,
-        spinAmount: 0,
-        fallDuration: 1.2
-      });
-    }
-    
-    return initialPostIts;
+    // Always start fresh with new wisdom notes on page load
+    return [];
   });
   
   const [draggedItem, setDraggedItem] = useState(null);
@@ -174,20 +136,19 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
   const velocityRef = useRef({ x: 0, y: 0 });
   const lastPosRef = useRef({ x: 0, y: 0, time: 0 });
   
-  // Initialize post-its after board is ready
+  // Initialize post-its after board is ready with exactly 5 wisdom notes
   useEffect(() => {
-    if (boardRef?.current && postIts.length === 0 && !localStorage.getItem('bulletinPostIts')) {
+    if (boardRef?.current && postIts.length === 0) {
       // Get board dimensions
       const boardRect = boardRef.current.getBoundingClientRect();
       const boardWidth = boardRect.width;
       const boardHeight = boardRect.height;
       
-      // Generate initial post-its within board boundaries
-      const colors = ['#ffeb3b', '#ffc0cb', '#b8e6b8', '#b3d9ff', '#dda0dd', '#ffcc99', '#ffb3b3', '#c8e6c9'];
+      // Generate exactly 5 initial post-its within board boundaries
+      const colors = ['#ffeb3b', '#ffc0cb', '#b8e6b8', '#b3d9ff', '#dda0dd'];
       const initialPostIts = [];
-      const count = 8 + Math.floor(Math.random() * 5); // 8-12 post-its
       
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < 5; i++) {
         const message = postItMessages[Math.floor(Math.random() * postItMessages.length)];
         const noteWidth = 100 + Math.floor(Math.random() * 40);
         const noteHeight = 80 + Math.floor(Math.random() * 40);
@@ -198,14 +159,14 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
         const maxY = boardHeight - noteHeight - padding;
         
         initialPostIts.push({
-          id: `postit-${Date.now()}-${i}`,
+          id: `postit-init-${Date.now()}-${i}`,
           x: padding + Math.random() * Math.max(maxX - padding, 100),
           y: padding + Math.random() * Math.max(maxY - padding, 100),
           width: noteWidth,
           height: noteHeight,
           rotate: -12 + Math.random() * 24,
           textRotate: -3 + Math.random() * 6,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: colors[i % colors.length],
           text: message.text,
           font: message.font,
           style: message.style || 'normal',
@@ -221,7 +182,7 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
       
       setPostIts(initialPostIts);
     }
-  }, [boardRef, postIts.length]);
+  }, []); // Empty dependency array - only run once on mount
   
   // Save to localStorage when items change
   useEffect(() => {
@@ -229,8 +190,8 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
   }, [stickers]);
   
   useEffect(() => {
-    const nonFallingPostIts = postIts.filter(p => !p.falling);
-    localStorage.setItem('bulletinPostIts', JSON.stringify(nonFallingPostIts));
+    // Don't save post-its to localStorage anymore - they should refresh on page load
+    // Only save stickers remain persistent
   }, [postIts]);
   
   // Handle mouse down for dragging
@@ -387,8 +348,9 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
     };
     
     setStickers([...stickers, newSticker]);
-    setShowStickerMenu(false);
-    setShowAddMenu(false);
+    // Keep the sticker menu open after selecting
+    // setShowStickerMenu(false);
+    // setShowAddMenu(false);
   };
   
   // Add new post-it
@@ -432,7 +394,8 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
     };
     
     setPostIts([...postIts, newPostIt]);
-    setShowAddMenu(false);
+    // Keep the menu open after adding a post-it
+    // setShowAddMenu(false);
   };
   
   // Delete sticker
@@ -463,9 +426,10 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
           setShowAddMenu(!showAddMenu);
           setShowStickerMenu(false);
         }}
-        title="Add decoration"
+        title={showAddMenu ? "Close menu" : "Add decoration"}
+        $isOpen={showAddMenu}
       >
-        +
+        <ButtonIcon $isOpen={showAddMenu}>+</ButtonIcon>
       </AddButton>
       
       {/* Main Menu */}

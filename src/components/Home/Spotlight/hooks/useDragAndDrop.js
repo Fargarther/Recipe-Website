@@ -8,7 +8,7 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const [cardPositions, setCardPositions] = useState({});
 
-  // Initialize positions for new cards considering rotation
+  // Initialize positions for new cards with better spacing
   useEffect(() => {
     if (!boardRef.current || cards.length === 0) return;
     
@@ -16,10 +16,31 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     const boardHeight = boardRef.current.offsetHeight;
     
     const newPositions = {};
-    cards.forEach(card => {
+    let positionsAssigned = 0;
+    
+    cards.forEach((card, index) => {
       if (!cardPositions[card.id]) {
         const rotatedBox = getRotatedBoundingBox(CARD_DIMENSIONS.width, CARD_DIMENSIONS.height, card.rotate);
-        newPositions[card.id] = getRandomPosition(boardWidth, boardHeight, rotatedBox.width, rotatedBox.height);
+        
+        // For initial 3 cards, space them out evenly
+        if (cards.length <= 3 && positionsAssigned < 3) {
+          // Divide board into 3 sections horizontally
+          const sectionWidth = (boardWidth - 100) / 3;
+          const baseX = 50 + (index * sectionWidth);
+          
+          // Add some randomness within the section
+          const randomOffsetX = (Math.random() - 0.5) * (sectionWidth * 0.5);
+          const randomOffsetY = Math.random() * (boardHeight * 0.4);
+          
+          newPositions[card.id] = {
+            x: Math.max(10, Math.min(baseX + randomOffsetX, boardWidth - rotatedBox.width - 80)),
+            y: Math.max(0, 50 + randomOffsetY)
+          };
+          positionsAssigned++;
+        } else {
+          // For additional cards, use random positioning
+          newPositions[card.id] = getRandomPosition(boardWidth, boardHeight, rotatedBox.width, rotatedBox.height);
+        }
       }
     });
     
