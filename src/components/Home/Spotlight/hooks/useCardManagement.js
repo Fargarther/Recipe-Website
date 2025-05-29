@@ -152,6 +152,46 @@ const useCardManagement = (recipeData) => {
     );
   }, []);
 
+  const addRecipeFromData = useCallback((recipe) => {
+    const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+    
+    const newCard = {
+      id: nextId,
+      recipeId: recipe.id,
+      title: recipe.title,
+      category: recipe.category,
+      time: recipe.time,
+      text: detailedText,
+      image: recipe.image || '/api/placeholder/300/300',
+      imageAlt: `${recipe.title} - finished dish`,
+      ingredients: recipe.ingredients || ["Default ingredients..."],
+      instructions: recipe.instructions || ["Default instructions..."],
+      zIndex: Math.max(...cards.map(c => c.zIndex), 0) + 1,
+      rotate: getRandomRotation(),
+      pinColor: getPinColor(),
+      pinTop: `${5 + Math.random() * 15}px`,
+      pinLeft: `${10 + Math.random() * 80}%`
+    };
+    
+    setCards(prevCards => [...prevCards, newCard]);
+    
+    const savedRating = localStorage.getItem(`bulletin_rating_${recipe.id}`);
+    setRatings(prevRatings => ({
+      ...prevRatings,
+      [nextId]: savedRating ? parseInt(savedRating) : 0
+    }));
+    
+    const savedComments = localStorage.getItem(`bulletin_comments_${recipe.id}`);
+    setComments(prevComments => ({
+      ...prevComments,
+      [nextId]: savedComments ? JSON.parse(savedComments) : []
+    }));
+    
+    setNextId(prevId => prevId + 1);
+    
+    return newCard;
+  }, [cards, nextId]);
+
   return {
     cards,
     setCards,
@@ -161,7 +201,8 @@ const useCardManagement = (recipeData) => {
     handleAddComment,
     addNewCard,
     clearAllCards,
-    updateCardRotations
+    updateCardRotations,
+    addRecipeFromData
   };
 };
 

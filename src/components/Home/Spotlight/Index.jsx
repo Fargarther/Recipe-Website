@@ -46,6 +46,7 @@ function Spotlight() {
     const saved = localStorage.getItem('pinnedCards');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
+  const [isDragOver, setIsDragOver] = useState(false);
   
   // Update board width on resize
   useEffect(() => {
@@ -75,7 +76,8 @@ function Spotlight() {
     handleAddComment,
     addNewCard,
     clearAllCards,
-    updateCardRotations
+    updateCardRotations,
+    addRecipeFromData
   } = useCardManagement(recipeData);
   
   const {
@@ -85,6 +87,66 @@ function Spotlight() {
     shufflePositions,
     setCardPositions
   } = useDragAndDrop(cards, setCards, boardRef);
+  
+  // Listen for portfolio drag events
+  useEffect(() => {
+    const handlePortfolioDrag = (event) => {
+      const recipe = event.detail.recipe;
+      if (recipe && boardRef.current) {
+        // Add the recipe to the board
+        const newCard = addRecipeFromData(recipe);
+        if (newCard) {
+          const boardWidth = boardRef.current.offsetWidth;
+          const boardHeight = boardRef.current.offsetHeight;
+          const rotatedBox = getRotatedBoundingBox(CARD_DIMENSIONS.width, CARD_DIMENSIONS.height, newCard.rotate);
+          
+          // Position in the center of the board
+          const pos = {
+            x: (boardWidth - rotatedBox.width) / 2,
+            y: (boardHeight - rotatedBox.height) / 2
+          };
+          
+          setCardPositions(prev => ({
+            ...prev,
+            [newCard.id]: pos
+          }));
+          
+          // Animation
+          setNewCardIds(prev => new Set([...prev, newCard.id]));
+          setTimeout(() => {
+            setNewCardIds(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(newCard.id);
+              return newSet;
+            });
+          }, 600);
+        }
+      }
+    };
+    
+    window.addEventListener('portfolio-recipe-drag', handlePortfolioDrag);
+    return () => window.removeEventListener('portfolio-recipe-drag', handlePortfolioDrag);
+  }, [addRecipeFromData, setCardPositions]);
+  
+  // Handle drag over bulletin board
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+  
+  const handleDragLeave = (e) => {
+    if (e.target === boardRef.current) {
+      setIsDragOver(false);
+    }
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    // The recipe data is handled via the custom event system
+    // This is just to provide visual feedback
+  };
   
   // Handle card expansion state
   const handleCardExpand = (cardId, isExpanded) => {
@@ -228,7 +290,17 @@ function Spotlight() {
         onClearCards={handleClear}
       />
       
-      <BulletinBoard ref={boardRef} hasExpandedCard={expandedCards.size > 0}>
+      <BulletinBoard 
+        ref={boardRef} 
+        hasExpandedCard={expandedCards.size > 0}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        style={{
+          border: isDragOver ? '3px dashed #a67c52' : 'none',
+          transition: 'border 0.2s'
+        }}
+      >
         <InteractiveBulletinDecorations boardRef={boardRef} />
         {cards.map(card => (
           <RecipeCard
