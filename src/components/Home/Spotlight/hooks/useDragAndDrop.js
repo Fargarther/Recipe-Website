@@ -99,21 +99,15 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     let x = clientX - boardRect.left - dragStartPos.x - 13;
     let y = clientY - boardRect.top - dragStartPos.y;
     
-    // Apply boundary constraints considering the rotated bounding box
+    // Apply boundary constraints
     const boardWidth = board.offsetWidth;
     const boardHeight = board.offsetHeight;
     
-    // Board boundaries
-    const frameWidth = 12; // Border frame width
-    const boardPadding = 32; // 2rem = 32px padding from BulletinBoardContainer
-    const buttonExtension = 13; // Buttons extend 13px to the left
-    const minPosition = frameWidth + boardPadding;
-    
-    // Adjust min/max positions for the rotated bounding box and button extension
-    const minX = minPosition + widthDiff - buttonExtension;
-    const minY = minPosition + heightDiff;
-    const maxX = boardWidth - minPosition - cardWidth - widthDiff + buttonExtension;
-    const maxY = boardHeight - minPosition - cardHeight - heightDiff;
+    // Simple boundaries that match getRandomPosition
+    const minX = 10 + widthDiff;
+    const minY = 0 + heightDiff;
+    const maxX = boardWidth - cardWidth - 80 - widthDiff;
+    const maxY = boardHeight - cardHeight - 100 - heightDiff;
     
     // Constrain positions to the boundary area
     x = Math.max(minX, Math.min(x, maxX));
