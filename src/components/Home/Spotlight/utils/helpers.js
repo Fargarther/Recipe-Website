@@ -21,13 +21,26 @@ export const getRotatedBoundingBox = (width, height, rotation) => {
 };
 
 export const getRandomPosition = (boardWidth, boardHeight, cardWidth = CARD_DIMENSIONS.width, cardHeight = CARD_DIMENSIONS.height) => {
-  const minPosition = BOARD_DIMENSIONS.minPosition;
-  const maxX = boardWidth - minPosition - cardWidth;
+  // Board boundaries
+  const frameWidth = 12; // Border frame width
+  const boardPadding = 32; // 2rem = 32px padding from BulletinBoardContainer
+  const buttonExtension = 13; // Buttons extend 13px to the left
+  const minPosition = frameWidth + boardPadding;
+  
+  // Calculate safe area for card placement
+  // Account for button extension on the left
+  const minX = minPosition - buttonExtension;
+  const maxX = boardWidth - minPosition - cardWidth + buttonExtension;
+  const minY = minPosition;
   const maxY = boardHeight - minPosition - cardHeight;
   
+  // Ensure we have positive ranges
+  const safeMaxX = Math.max(minX + 10, maxX);
+  const safeMaxY = Math.max(minY + 10, maxY);
+  
   return {
-    x: minPosition + Math.random() * (maxX - minPosition),
-    y: minPosition + Math.random() * (maxY - minPosition)
+    x: minX + Math.random() * (safeMaxX - minX),
+    y: minY + Math.random() * (safeMaxY - minY)
   };
 };
 

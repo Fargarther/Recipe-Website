@@ -35,7 +35,9 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     if (e.target.classList.contains('star') || 
         e.target.classList.contains('flip-indicator') ||
         e.target.classList.contains('expand-button') ||
-        e.target.classList.contains('notes-button')) {
+        e.target.classList.contains('comments-button') ||
+        e.target.classList.contains('pin-button') ||
+        e.target.closest('.pin-button')) {
       return;
     }
     
@@ -57,11 +59,12 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     const board = boardRef.current;
     const boardRect = board.getBoundingClientRect();
     
-    // Get current card position
+    // Get current card position (accounting for the margin-left)
     const currentPos = cardPositions[cardId] || { x: 0, y: 0 };
     
     // Calculate cursor position relative to card's top-left corner
-    const offsetX = clientX - boardRect.left - currentPos.x;
+    // Add 13px to account for the margin-left on CardContainer
+    const offsetX = clientX - boardRect.left - currentPos.x - 13;
     const offsetY = clientY - boardRect.top - currentPos.y;
     
     setDragStartPos({ x: offsetX, y: offsetY });
@@ -92,18 +95,24 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     const heightDiff = (rotatedBox.height - cardHeight) / 2;
     
     // Calculate new position relative to the board
-    let x = clientX - boardRect.left - dragStartPos.x;
+    // Subtract 13px to account for the margin-left offset
+    let x = clientX - boardRect.left - dragStartPos.x - 13;
     let y = clientY - boardRect.top - dragStartPos.y;
     
     // Apply boundary constraints considering the rotated bounding box
     const boardWidth = board.offsetWidth;
     const boardHeight = board.offsetHeight;
-    const minPosition = BOARD_DIMENSIONS.minPosition;
     
-    // Adjust min/max positions for the rotated bounding box
-    const minX = minPosition + widthDiff;
+    // Board boundaries
+    const frameWidth = 12; // Border frame width
+    const boardPadding = 32; // 2rem = 32px padding from BulletinBoardContainer
+    const buttonExtension = 13; // Buttons extend 13px to the left
+    const minPosition = frameWidth + boardPadding;
+    
+    // Adjust min/max positions for the rotated bounding box and button extension
+    const minX = minPosition + widthDiff - buttonExtension;
     const minY = minPosition + heightDiff;
-    const maxX = boardWidth - minPosition - cardWidth - widthDiff;
+    const maxX = boardWidth - minPosition - cardWidth - widthDiff + buttonExtension;
     const maxY = boardHeight - minPosition - cardHeight - heightDiff;
     
     // Constrain positions to the boundary area

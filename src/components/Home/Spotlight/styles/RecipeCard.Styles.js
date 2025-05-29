@@ -29,7 +29,11 @@ export const CardContainer = styled.div`
   transition: ${props => props.$isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
   z-index: ${props => props.$isExpanded ? 1000 : props.$isDragging ? 100 : props.$zIndex};
   perspective: 1500px;
-  cursor: ${props => props.$isDragging ? 'grabbing' : 'grab'};
+  cursor: ${props => props.$isPinned ? 'not-allowed' : props.$isDragging ? 'grabbing' : 'grab'};
+  opacity: ${props => props.$isPinned ? 0.98 : 1};
+  
+  /* Account for buttons extending beyond card boundaries */
+  margin-left: 13px; /* Half the button width that extends left */
   
   &.new-card {
     animation: cardPulse 0.6s ease-out;
@@ -58,19 +62,86 @@ export const RecipeCardWrapper = styled.div`
   transition: transform 0.6s cubic-bezier(0.455, 0.03, 0.515, 1.55);
   transform: ${props => props.$isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
   will-change: transform;
+`;
+
+export const PinButton = styled.button`
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: ${props => props.$isPinned 
+    ? 'radial-gradient(circle at 30% 30%, #2fa99c, #2a9d8f)' 
+    : `radial-gradient(circle at 30% 30%, ${props.$pinColor || '#b54b35'}, ${props.$pinColor || '#b54b35'})`};
+  border-radius: 50%;
+  top: ${props => props.$pinTop || '12px'};
+  left: ${props => props.$pinLeft || '50%'};
+  transform: ${props => props.$isPinned 
+    ? 'translateX(-50%) translateY(3px) scale(0.95)' 
+    : 'translateX(-50%) translateY(0) scale(1)'};
+  box-shadow: ${props => props.$isPinned 
+    ? 'inset 0 3px 5px rgba(0, 0, 0, 0.6), inset 0 -1px 2px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3)' 
+    : '0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.3)'};
+  z-index: 999;
+  border: ${props => props.$isPinned 
+    ? '1px solid rgba(0, 0, 0, 0.3)' 
+    : '1px solid rgba(255, 255, 255, 0.2)'};
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: ${props => props.$isPinned ? '12px' : '10px'};
+    height: ${props => props.$isPinned ? '12px' : '10px'};
+    background: ${props => props.$isPinned 
+      ? 'radial-gradient(circle at 40% 40%, #ffffff, #e0e0e0)' 
+      : 'radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3))'};
+    border-radius: 50%;
+    box-shadow: ${props => props.$isPinned 
+      ? 'inset 0 -1px 2px rgba(0, 0, 0, 0.2)' 
+      : '0 1px 2px rgba(0, 0, 0, 0.2)'};
+  }
   
   &:after {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: ${props => props.$pinColor || '#b54b35'};
-    border-radius: 50%;
-    top: ${props => props.$pinTop || '10px'};
-    left: ${props => props.$pinLeft || '50%'};
+    bottom: -5px;
+    left: 50%;
     transform: translateX(-50%);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    z-index: 999;
+    width: 4px;
+    height: 10px;
+    background: ${props => props.$isPinned 
+      ? 'transparent' 
+      : `linear-gradient(to bottom, ${props.$pinColor || '#b54b35'}, rgba(0, 0, 0, 0.5))`};
+    opacity: ${props => props.$isPinned ? 0 : 0.8};
+    transition: opacity 0.2s;
+    border-radius: 0 0 2px 2px;
+    box-shadow: ${props => props.$isPinned 
+      ? 'none' 
+      : '0 2px 3px rgba(0, 0, 0, 0.3)'};
+  }
+  
+  &:hover {
+    transform: ${props => props.$isPinned 
+      ? 'translateX(-50%) translateY(3px) scale(1.05)' 
+      : 'translateX(-50%) translateY(-1px) scale(1.1)'};
+    background: ${props => props.$isPinned 
+      ? 'radial-gradient(circle at 30% 30%, #2eb5a7, #238b7f)' 
+      : `radial-gradient(circle at 30% 30%, ${props.$pinColor ? '#c05040' : '#c05040'}, #a04030)`};
+    box-shadow: ${props => props.$isPinned 
+      ? 'inset 0 3px 6px rgba(0, 0, 0, 0.7), inset 0 -1px 2px rgba(255, 255, 255, 0.2), 0 1px 3px rgba(0, 0, 0, 0.4)' 
+      : '0 5px 10px rgba(0, 0, 0, 0.4), 0 3px 5px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.3)'};
+  }
+  
+  &:active {
+    transform: ${props => props.$isPinned 
+      ? 'translateX(-50%) translateY(4px) scale(0.92)' 
+      : 'translateX(-50%) translateY(2px) scale(0.95)'};
+    box-shadow: ${props => props.$isPinned 
+      ? 'inset 0 4px 7px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 0, 0, 0.5)' 
+      : 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3)'};
   }
 `;
 
@@ -89,6 +160,7 @@ export const CardSide = styled.div`
   transform: ${props => props.$back ? 'rotateY(180deg)' : 'rotateY(0deg)'};
   overflow-y: ${props => props.$back ? 'auto' : 'visible'};
   will-change: transform;
+  pointer-events: auto;
 
   &:before {
     content: '';

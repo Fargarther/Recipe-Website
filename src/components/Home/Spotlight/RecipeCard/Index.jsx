@@ -9,7 +9,8 @@ import {
   CommentsButton,
   CommentsSection,
   ExpandedContent,
-  ExpandedSection
+  ExpandedSection,
+  PinButton
 } from '../styles/RecipeCard.styles';
 import CardFront from './CardFront';
 import CardBack from './CardBack';
@@ -41,10 +42,12 @@ const RecipeCard = ({
   isNew,
   rating,
   comments,
+  isPinned,
   onMouseDown,
   onRatingChange,
   onAddComment,
   onExpand,
+  onPinToggle,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -54,6 +57,23 @@ const RecipeCard = ({
     e.stopPropagation();
     playFlipSound();
     setIsFlipped(!isFlipped);
+  };
+  
+  const togglePin = (e) => {
+    e.stopPropagation();
+    
+    // Play pin sound effect
+    try {
+      const pinSound = new Audio("data:audio/wav;base64,UklGRiQBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQABAADw/wAACAAIAPj/AAD4/wAA+P8AAAAAAAAAAAAAAAD4/wAA+P8AAPj/AAAAAAAA+P8AAPj/AAD4/wAACAAIABAAEAAQABAAEAAQAAgACAAIAAgACAAIAAgACAAAAAAAAAAAAAAA+P8AAPj/AAD4/wAA+P8AAPj/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      pinSound.volume = 0.3;
+      pinSound.play();
+    } catch (e) {
+      console.log("Audio not supported");
+    }
+    
+    if (onPinToggle) {
+      onPinToggle(card.id);
+    }
   };
   
   const toggleExpand = (e) => {
@@ -89,6 +109,7 @@ const RecipeCard = ({
       className={isNew ? 'new-card' : ''}
       $isDragging={isDragging}
       $isExpanded={isExpanded}
+      $isPinned={isPinned}
       $rotate={card.rotate}
       $x={position.x}
       $y={position.y}
@@ -96,6 +117,16 @@ const RecipeCard = ({
       onMouseDown={onMouseDown}
       onTouchStart={onMouseDown}
     >
+      <PinButton
+        className="pin-button"
+        onClick={togglePin}
+        $isPinned={isPinned}
+        $pinColor={card.pinColor}
+        $pinTop={card.pinTop}
+        $pinLeft={card.pinLeft}
+        title={isPinned ? "Unpin card" : "Pin card in place"}
+      />
+      
       <ExpandButton 
         className="expand-button"
         onClick={toggleExpand}
@@ -117,9 +148,6 @@ const RecipeCard = ({
       <RecipeCardWrapper 
         $isFlipped={isFlipped && !isExpanded}
         $isExpanded={isExpanded}
-        $pinColor={card.pinColor}
-        $pinTop={card.pinTop}
-        $pinLeft={card.pinLeft}
       >
         {!isExpanded ? (
           <>

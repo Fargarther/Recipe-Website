@@ -23,10 +23,31 @@ const SpotlightSection = styled.section`
   }
 `;
 
+// Add shake animation styles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes pinnedShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+`;
+document.head.appendChild(style);
+
 function Spotlight() {
   const boardRef = useRef(null);
   const [newCardIds, setNewCardIds] = useState(new Set());
   const [expandedCards, setExpandedCards] = useState(new Set());
+  const [pinnedCards, setPinnedCards] = useState(() => {
+    // Load pinned cards from localStorage
+    const saved = localStorage.getItem('pinnedCards');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+  
+  // Save pinned cards to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('pinnedCards', JSON.stringify([...pinnedCards]));
+  }, [pinnedCards]);
   
   // Use custom hooks
   const {
@@ -62,6 +83,44 @@ function Spotlight() {
     });
   };
   
+  // Handle pin toggle
+  const handlePinToggle = (cardId) => {
+    setPinnedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(cardId)) {
+        newSet.delete(cardId);
+      } else {
+        newSet.add(cardId);
+      }
+      return newSet;
+    });
+  };
+  
+  // Modified mouse down handler to check if card is pinned
+  const handlePinnedCardMouseDown = (e, cardId) => {
+    // Check if clicking on the pin button itself
+    if (e.target.classList.contains('pin-button') || e.target.closest('.pin-button')) {
+      return; // Let the pin button handle its own click
+    }
+    
+    if (pinnedCards.has(cardId)) {
+      // Card is pinned, don't allow dragging
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Add shake animation to indicate card is pinned
+      const cardElement = e.currentTarget;
+      cardElement.style.animation = 'pinnedShake 0.3s';
+      setTimeout(() => {
+        cardElement.style.animation = '';
+      }, 300);
+      
+      return;
+    }
+    // Card is not pinned, allow normal dragging
+    handleCardMouseDown(e, cardId);
+  };
+  
   // Handle adding a new card
   const handleAddCard = () => {
     const newCard = addNewCard();
@@ -88,10 +147,27 @@ function Spotlight() {
     }
   };
   
-  // Handle shuffle
+  // Handle shuffle - only shuffle unpinned cards
   const handleShuffle = () => {
     updateCardRotations();
-    shufflePositions();
+    
+    if (!boardRef.current) return;
+    
+    const boardWidth = boardRef.current.offsetWidth;
+    const boardHeight = boardRef.current.offsetHeight;
+    
+    const newPositions = { ...cardPositions };
+    
+    cards.forEach(card => {
+      // Skip pinned cards
+      if (!pinnedCards.has(card.id)) {
+        const rotatedBox = getRotatedBoundingBox(CARD_DIMENSIONS.width, CARD_DIMENSIONS.height, card.rotate);
+        const pos = getRandomPosition(boardWidth, boardHeight, rotatedBox.width, rotatedBox.height);
+        newPositions[card.id] = pos;
+      }
+    });
+    
+    setCardPositions(newPositions);
   };
   
   // Handle clear with cleanup
@@ -99,6 +175,7 @@ function Spotlight() {
     clearAllCards();
     setNewCardIds(new Set());
     setExpandedCards(new Set());
+    setPinnedCards(new Set());
   };
   
   return (
@@ -119,12 +196,14 @@ function Spotlight() {
             position={cardPositions[card.id] || { x: 0, y: 0 }}
             isDragging={activeCard === card.id}
             isNew={newCardIds.has(card.id)}
+            isPinned={pinnedCards.has(card.id)}
             rating={ratings[card.id] || 0}
             comments={comments[card.id] || []}
-            onMouseDown={(e) => handleCardMouseDown(e, card.id)}
+            onMouseDown={(e) => handlePinnedCardMouseDown(e, card.id)}
             onRatingChange={(value) => handleRating(card.id, card.recipeId, value)}
             onAddComment={(comment) => handleAddComment(card.id, card.recipeId, comment)}
             onExpand={(isExpanded) => handleCardExpand(card.id, isExpanded)}
+            onPinToggle={handlePinToggle}
           />
         ))}
       </BulletinBoard>

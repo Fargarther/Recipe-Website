@@ -1,5 +1,5 @@
 // src/components/Home/Spotlight/RecipeCard/Comments.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 
 const CommentsContainer = styled.div`
@@ -28,8 +28,53 @@ const CommentsContainer = styled.div`
 const CommentsHeader = styled.h4`
   font-size: 14px;
   color: #59483b;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   font-weight: bold;
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+`;
+
+const FilterButton = styled.button`
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid ${props => props.$active ? '#b38c42' : 'rgba(200, 180, 120, 0.5)'};
+  background: ${props => props.$active ? '#b38c42' : 'rgba(255, 254, 245, 0.5)'};
+  color: ${props => props.$active ? '#fff' : '#8a7248'};
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: ${props => props.$active ? '#a67c37' : 'rgba(200, 180, 120, 0.2)'};
+    border-color: #b38c42;
+  }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid rgba(200, 180, 120, 0.5);
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #59483b;
+  background: rgba(255, 254, 245, 0.8);
+  margin-bottom: 8px;
+  
+  &:focus {
+    outline: none;
+    border-color: #b38c42;
+  }
+  
+  &::placeholder {
+    color: #a09080;
+  }
 `;
 
 const CommentsList = styled.div`
@@ -47,6 +92,18 @@ const Comment = styled.div`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid rgba(200, 180, 120, 0.3);
+  animation: ${props => props.$isNew ? 'fadeIn 0.3s ease' : 'none'};
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 const CommentAuthor = styled.div`
@@ -133,9 +190,20 @@ const SubmitButton = styled.button`
   }
 `;
 
+const CommentCounter = styled.div`
+  font-size: 10px;
+  color: #8a7248;
+  text-align: right;
+  margin-bottom: 4px;
+`;
+
 const Comments = ({ comments, onAddComment, recipeTitle }) => {
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [filterType, setFilterType] = useState('all'); // all, today, week, month
+  const [sortOrder, setSortOrder] = useState('newest'); // newest, oldest
+  const [searchQuery, setSearchQuery] = useState('');
+  const [newCommentIds, setNewCommentIds] = useState(new Set());
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -163,6 +231,16 @@ const Comments = ({ comments, onAddComment, recipeTitle }) => {
     onAddComment(comment);
     setNewComment('');
     
+    // Track new comment for animation
+    setNewCommentIds(prev => new Set([...prev, comment.id]));
+    setTimeout(() => {
+      setNewCommentIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(comment.id);
+        return newSet;
+      });
+    }, 500);
+    
     // Simulate submission delay
     setTimeout(() => {
       setIsSubmitting(false);
@@ -187,16 +265,111 @@ const Comments = ({ comments, onAddComment, recipeTitle }) => {
     return date.toLocaleDateString();
   };
   
+  // Filter and sort comments
+  const filteredAndSortedComments = useMemo(() => {
+    let filtered = [...comments];
+    
+    // Apply time filter
+    const now = new Date();
+    if (filterType === 'today') {
+      filtered = filtered.filter(comment => {
+        const commentDate = new Date(comment.timestamp);
+        return commentDate.toDateString() === now.toDateString();
+      });
+    } else if (filterType === 'week') {
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      filtered = filtered.filter(comment => {
+        const commentDate = new Date(comment.timestamp);
+        return commentDate >= weekAgo;
+      });
+    } else if (filterType === 'month') {
+      const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      filtered = filtered.filter(comment => {
+        const commentDate = new Date(comment.timestamp);
+        return commentDate >= monthAgo;
+      });
+    }
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(comment => 
+        comment.text.toLowerCase().includes(query) ||
+        comment.author.toLowerCase().includes(query)
+      );
+    }
+    
+    // Apply sort
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.timestamp);
+      const dateB = new Date(b.timestamp);
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+    
+    return filtered;
+  }, [comments, filterType, sortOrder, searchQuery]);
+  
   return (
     <CommentsContainer>
       <CommentsHeader>Community Comments</CommentsHeader>
       
-      {comments.length === 0 ? (
-        <NoComments>Be the first to comment on this recipe!</NoComments>
+      <SearchInput
+        type="text"
+        placeholder="Search comments..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      
+      <FilterContainer>
+        <FilterButton
+          $active={filterType === 'all'}
+          onClick={() => setFilterType('all')}
+        >
+          All Time
+        </FilterButton>
+        <FilterButton
+          $active={filterType === 'today'}
+          onClick={() => setFilterType('today')}
+        >
+          Today
+        </FilterButton>
+        <FilterButton
+          $active={filterType === 'week'}
+          onClick={() => setFilterType('week')}
+        >
+          This Week
+        </FilterButton>
+        <FilterButton
+          $active={filterType === 'month'}
+          onClick={() => setFilterType('month')}
+        >
+          This Month
+        </FilterButton>
+        <FilterButton
+          $active={sortOrder === 'newest'}
+          onClick={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
+        >
+          {sortOrder === 'newest' ? '↓ Newest' : '↑ Oldest'}
+        </FilterButton>
+      </FilterContainer>
+      
+      <CommentCounter>
+        {filteredAndSortedComments.length} of {comments.length} comments
+      </CommentCounter>
+      
+      {filteredAndSortedComments.length === 0 ? (
+        <NoComments>
+          {comments.length === 0 
+            ? 'Be the first to comment on this recipe!' 
+            : 'No comments match your filters.'}
+        </NoComments>
       ) : (
         <CommentsList>
-          {comments.map(comment => (
-            <Comment key={comment.id}>
+          {filteredAndSortedComments.map(comment => (
+            <Comment 
+              key={comment.id} 
+              $isNew={newCommentIds.has(comment.id)}
+            >
               <CommentAuthor>{comment.author}</CommentAuthor>
               <CommentText>{comment.text}</CommentText>
               <CommentTime>{formatTime(comment.timestamp)}</CommentTime>
