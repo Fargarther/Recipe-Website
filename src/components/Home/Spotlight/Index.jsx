@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import BulletinBoard from './BulletinBoard';
 import RecipeCard from './RecipeCard/Index';
 import ControlBar from './ControlBar';
+import InteractiveBulletinDecorations from './InteractiveBulletinDecorations';
 import useDragAndDrop from './hooks/useDragAndDrop';
 import useCardManagement from './hooks/useCardManagement';
 import { recipeData } from '../../../data/recipes';
@@ -228,6 +229,7 @@ function Spotlight() {
       />
       
       <BulletinBoard ref={boardRef} hasExpandedCard={expandedCards.size > 0}>
+        <InteractiveBulletinDecorations boardRef={boardRef} />
         {cards.map(card => (
           <RecipeCard
             key={card.id}
