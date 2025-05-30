@@ -53,6 +53,9 @@ const PortfolioHeader = styled.div`
   height: 30px;
   cursor: pointer;
   user-select: none;
+  position: relative;
+  z-index: 100;
+  background: #f5f0dc;
   
   &:hover .handle {
     transform: translateY(-2px);
@@ -112,16 +115,16 @@ const CategoryTab = styled.div`
   font-family: 'Playfair Display', serif;
   font-weight: 600;
   font-size: 14px;
-  color: #fff;
+  color: ${props => props.$active ? '#fff' : 'rgba(255, 255, 255, 0.9)'};
   cursor: pointer;
   position: relative;
   transition: all 0.2s;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   
   &:hover {
     height: 45px;
     transform: translateY(-2px);
+    color: #fff;
   }
   
   &:before {
@@ -131,7 +134,7 @@ const CategoryTab = styled.div`
     left: 0;
     right: 0;
     height: 100%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
     border-radius: 8px 8px 0 0;
     pointer-events: none;
   }
@@ -139,45 +142,42 @@ const CategoryTab = styled.div`
 
 // Recipe cards container
 const RecipeCardsContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  padding: 0 20px;
+  display: ${props => props.$expanded ? 'flex' : 'none'};
+  gap: 20px;
+  padding: 20px;
   height: ${props => props.$expanded ? '200px' : '0'};
-  overflow: ${props => props.$expanded ? 'visible' : 'hidden'};
-  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+  align-content: flex-start;
 `;
 
 // Category section
 const CategorySection = styled.div`
-  flex: 1;
-  max-width: 200px;
-  display: ${props => props.$active ? 'flex' : 'none'};
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 10px;
+  display: ${props => props.$active ? 'contents' : 'none'};
 `;
 
 // Individual recipe card
 const RecipeCard = styled.div`
-  width: 100%;
-  height: ${props => props.$expanded ? '140px' : '40px'};
   background: #fffef5;
   border: 1px solid rgba(210, 190, 150, 0.5);
-  border-radius: 4px;
-  padding: 8px 12px;
+  border-radius: 6px;
+  padding: 12px 16px;
   cursor: grab;
   position: relative;
   transition: all 0.2s;
-  transform: ${props => props.$index ? `rotate(${props.$index % 2 === 0 ? -1 : 1}deg)` : 'rotate(0deg)'};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: -100px;
-  z-index: ${props => 10 - props.$index};
+  width: 180px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &:hover {
-    transform: translateY(-5px) rotate(0deg) !important;
+    transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 20;
-    height: 140px;
+    background: #fffff8;
   }
   
   &:active {
@@ -200,52 +200,38 @@ const RecipeCard = styled.div`
         transparent 2px
       );
     pointer-events: none;
+    border-radius: 6px;
   }
 `;
 
 const RecipeTitle = styled.h4`
   font-family: 'Courier New', monospace;
-  font-size: 13px;
+  font-size: 14px;
   color: #59483b;
-  margin: 0 0 4px 0;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const RecipeMeta = styled.p`
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  color: #8a7248;
   margin: 0;
-  opacity: ${props => props.$visible ? 1 : 0};
-  transition: opacity 0.2s;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
 `;
 
-const RecipeDescription = styled.p`
+const EmptyMessage = styled.div`
   font-family: 'Courier New', monospace;
-  font-size: 11px;
-  color: #5d4e3f;
-  margin: 8px 0 0 0;
-  line-height: 1.3;
-  opacity: ${props => props.$visible ? 1 : 0};
-  transition: opacity 0.2s;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 14px;
+  color: #8a7248;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
 `;
 
 // Category colors
 const categoryColors = {
-  'All': '#a67c52',
-  'Appetizers': '#e3c099',
-  'Mains': '#7a9fb8',
-  'Sides': '#8fa678',
-  'Desserts': '#c8a2c8',
-  'Drinks': '#f4a460',
-  'Bread': '#d4a574'
+  'All': '#9e9e9e',
+  'Apps': '#a8b5c4',
+  'Mains': '#8fa5b8',
+  'Sides': '#9cb89c',
+  'Desserts': '#c8a8b8',
+  'Drinks': '#d4b896',
+  'Bread': '#b8a898'
 };
 
 const RecipePortfolio = ({ onDragStart }) => {
@@ -255,10 +241,16 @@ const RecipePortfolio = ({ onDragStart }) => {
   
   // Group recipes by category
   const recipesByCategory = recipeData.reduce((acc, recipe) => {
-    if (!acc[recipe.category]) {
-      acc[recipe.category] = [];
+    let category = recipe.category;
+    // Map recipe categories to tab names
+    if (category === 'Main') category = 'Mains';
+    if (category === 'Dessert') category = 'Desserts';
+    if (category === 'Appetizers') category = 'Apps';
+    
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[recipe.category].push(recipe);
+    acc[category].push(recipe);
     acc['All'] = [...(acc['All'] || []), recipe];
     return acc;
   }, {});
@@ -295,7 +287,7 @@ const RecipePortfolio = ({ onDragStart }) => {
     }
   };
   
-  const categories = ['All', 'Appetizers', 'Mains', 'Sides', 'Desserts', 'Drinks', 'Bread'];
+  const categories = ['All', 'Apps', 'Sides', 'Mains', 'Desserts'];
   
   return (
     <PortfolioContainer $expanded={expanded}>
@@ -305,46 +297,43 @@ const RecipePortfolio = ({ onDragStart }) => {
       
       <CategoryTabs>
         {categories.map(category => (
-          recipesByCategory[category] && (
-            <CategoryTab
-              key={category}
-              $active={activeCategory === category}
-              $color={categoryColors[category]}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </CategoryTab>
-          )
+          <CategoryTab
+            key={category}
+            $active={activeCategory === category}
+            $color={categoryColors[category]}
+            onClick={() => setActiveCategory(category)}
+          >
+            {category}
+          </CategoryTab>
         ))}
       </CategoryTabs>
       
       <RecipeCardsContainer $expanded={expanded}>
-        {categories.map(category => (
-          recipesByCategory[category] && (
+        {categories.map(category => {
+          const recipes = recipesByCategory[category] || [];
+          return (
             <CategorySection
               key={category}
               $active={activeCategory === category}
             >
-              {recipesByCategory[category].slice(0, 5).map((recipe, index) => (
-                <RecipeCard
-                  key={recipe.id}
-                  $expanded={expanded}
-                  $index={index}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, recipe)}
-                >
-                  <RecipeTitle>{recipe.title}</RecipeTitle>
-                  <RecipeMeta $visible={expanded}>
-                    {recipe.category} • {recipe.time}
-                  </RecipeMeta>
-                  <RecipeDescription $visible={expanded}>
-                    A delightful {recipe.category.toLowerCase()} recipe perfect for any occasion.
-                  </RecipeDescription>
-                </RecipeCard>
-              ))}
+              {recipes.length > 0 ? (
+                recipes.map((recipe, index) => (
+                  <RecipeCard
+                    key={recipe.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, recipe)}
+                  >
+                    <RecipeTitle>{recipe.title}</RecipeTitle>
+                  </RecipeCard>
+                ))
+              ) : (
+                activeCategory === category && (
+                  <EmptyMessage>No recipes in this category</EmptyMessage>
+                )
+              )}
             </CategorySection>
-          )
-        ))}
+          );
+        })}
       </RecipeCardsContainer>
     </PortfolioContainer>
   );
