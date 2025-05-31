@@ -93,22 +93,23 @@ const Handle = styled.div`
   }
 `;
 
-// Category tabs container
+// Category tabs container - now full width
 const CategoryTabs = styled.div`
   display: flex;
   height: 50px;
-  padding: 0 20px;
-  gap: 2px;
+  padding: 0; /* Removed padding */
+  gap: 0; /* Removed gap */
   align-items: flex-end;
+  width: 100%;
 `;
 
-// Individual category tab
+// Individual category tab - now stretches to fill available space
 const CategoryTab = styled.div`
   flex: 1;
-  max-width: 200px;
+  /* Removed max-width */
   height: ${props => props.$active ? '45px' : '40px'};
   background: ${props => props.$color};
-  border-radius: 8px 8px 0 0;
+  /* Removed border-radius for seamless connection */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,12 +120,19 @@ const CategoryTab = styled.div`
   cursor: pointer;
   position: relative;
   transition: all 0.2s;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  /* Removed individual box-shadow for cleaner look */
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  
+  &:last-child {
+    border-right: none;
+  }
   
   &:hover {
     height: 45px;
     transform: translateY(-2px);
     color: #fff;
+    z-index: 1;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
   }
   
   &:before {
@@ -135,7 +143,6 @@ const CategoryTab = styled.div`
     right: 0;
     height: 100%;
     background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    border-radius: 8px 8px 0 0;
     pointer-events: none;
   }
 `;

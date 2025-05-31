@@ -1,5 +1,5 @@
 // src/components/Home/Spotlight/InteractiveBulletinDecorations.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import styled from 'styled-components';
 import Stickers, { SeasonalStickers } from './decorations/Stickers';
 import PostItNotes, { postItMessages } from './decorations/PostItNotes';
@@ -118,7 +118,7 @@ const StickerLabel = styled.div`
   text-align: center;
 `;
 
-const InteractiveBulletinDecorations = ({ boardRef }) => {
+const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
   const [stickers, setStickers] = useState(() => {
     const saved = localStorage.getItem('bulletinStickers');
     return saved ? JSON.parse(saved) : [];
@@ -135,6 +135,18 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const velocityRef = useRef({ x: 0, y: 0 });
   const lastPosRef = useRef({ x: 0, y: 0, time: 0 });
+  
+  // Expose clear methods to parent component
+  useImperativeHandle(ref, () => ({
+    clearAll: () => {
+      console.log('Clearing all decorations'); // Debug log
+      setStickers([]);
+      setPostIts([]);
+      localStorage.removeItem('bulletinStickers');
+      setShowAddMenu(false);
+      setShowStickerMenu(false);
+    }
+  }), []);
   
   // Initialize post-its after board is ready with exactly 5 wisdom notes
   useEffect(() => {
@@ -188,11 +200,6 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
   useEffect(() => {
     localStorage.setItem('bulletinStickers', JSON.stringify(stickers));
   }, [stickers]);
-  
-  useEffect(() => {
-    // Don't save post-its to localStorage anymore - they should refresh on page load
-    // Only save stickers remain persistent
-  }, [postIts]);
   
   // Handle mouse down for dragging
   const handleMouseDown = (e, itemId, itemType) => {
@@ -348,9 +355,6 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
     };
     
     setStickers([...stickers, newSticker]);
-    // Keep the sticker menu open after selecting
-    // setShowStickerMenu(false);
-    // setShowAddMenu(false);
   };
   
   // Add new post-it
@@ -394,8 +398,6 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
     };
     
     setPostIts([...postIts, newPostIt]);
-    // Keep the menu open after adding a post-it
-    // setShowAddMenu(false);
   };
   
   // Delete sticker
@@ -458,6 +460,8 @@ const InteractiveBulletinDecorations = ({ boardRef }) => {
       </AddMenu>
     </>
   );
-};
+});
+
+InteractiveBulletinDecorations.displayName = 'InteractiveBulletinDecorations';
 
 export default InteractiveBulletinDecorations;
