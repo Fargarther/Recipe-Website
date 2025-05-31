@@ -37,6 +37,7 @@ document.head.appendChild(style);
 
 function Spotlight() {
   const boardRef = useRef(null);
+  const decorationsRef = useRef(null);
   const [boardWidth, setBoardWidth] = useState(0);
   const [newCardIds, setNewCardIds] = useState(new Set());
   const [expandedCards, setExpandedCards] = useState(new Set());
@@ -271,13 +272,19 @@ function Spotlight() {
     setCardPositions(newPositions);
   };
   
-  // Handle clear with cleanup
+  // Handle clear with cleanup - now also clears decorations
   const handleClear = () => {
+    // Clear recipe cards
     clearAllCards();
     setNewCardIds(new Set());
     setExpandedCards(new Set());
     setCardsWithComments(new Set());
     setPinnedCards(new Set());
+    
+    // Clear decorations (stickers and post-it notes)
+    if (decorationsRef.current) {
+      decorationsRef.current.clearAll();
+    }
   };
   
   return (
@@ -301,7 +308,10 @@ function Spotlight() {
           transition: 'border 0.2s'
         }}
       >
-        <InteractiveBulletinDecorations boardRef={boardRef} />
+        <InteractiveBulletinDecorations 
+          ref={decorationsRef}
+          boardRef={boardRef} 
+        />
         {cards.map(card => (
           <RecipeCard
             key={card.id}

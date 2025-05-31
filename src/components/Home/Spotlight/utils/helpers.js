@@ -48,6 +48,6 @@ export const playFlipSound = () => {
     flipSound.volume = 0.2;
     flipSound.play();
   } catch (e) {
-    console.log("Audio not supported");
+    // Audio not supported
   }
 };

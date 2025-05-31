@@ -86,7 +86,7 @@ const RecipeCard = ({
       pinSound.volume = 0.3;
       pinSound.play();
     } catch (e) {
-      console.log("Audio not supported");
+      // Audio not supported
     }
     
     if (onPinToggle) {

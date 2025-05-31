@@ -204,7 +204,6 @@ function Subscribe() {
     }
     
     // In a real app, you would send this to your backend
-    console.log('Subscription email:', email);
     
     setEmail('');
     setShowSuccess(true);

@@ -15,11 +15,8 @@ function Home() {
   const handleRecipeDragStart = (recipe) => {
     // This will be passed to the Spotlight component
     // to handle adding the dragged recipe to the bulletin board
-    console.log('Recipe dragged from portfolio:', recipe);
     
-    // You'll need to implement a way to communicate with the Spotlight component
-    // One option is to use a global state manager or React Context
-    // For now, we'll dispatch a custom event that Spotlight can listen to
+    // Dispatch a custom event that Spotlight can listen to
     window.dispatchEvent(new CustomEvent('portfolio-recipe-drag', { 
       detail: { recipe } 
     }));

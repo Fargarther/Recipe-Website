@@ -139,7 +139,6 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
   // Expose clear methods to parent component
   useImperativeHandle(ref, () => ({
     clearAll: () => {
-      console.log('Clearing all decorations'); // Debug log
       setStickers([]);
       setPostIts([]);
       localStorage.removeItem('bulletinStickers');
