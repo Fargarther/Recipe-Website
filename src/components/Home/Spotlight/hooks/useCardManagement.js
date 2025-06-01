@@ -12,7 +12,8 @@ const useCardManagement = (recipeData) => {
   useState(() => {
     if (cards.length === 0 && recipeData.length > 0) {
       const initialCards = recipeData.slice(0, 3).map((recipe, index) => {
-        const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+        // Use custom text if provided, otherwise use the template
+        const detailedText = recipe.text || `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
         
         return {
           id: index + 1,
@@ -95,7 +96,8 @@ const useCardManagement = (recipeData) => {
     if (recipeData.length < nextId) return null;
     
     const recipe = recipeData[nextId - 1];
-    const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+    // Use custom text if provided, otherwise use the template
+    const detailedText = recipe.text || `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
     
     const newCard = {
       id: nextId,
@@ -153,7 +155,8 @@ const useCardManagement = (recipeData) => {
   }, []);
 
   const addRecipeFromData = useCallback((recipe) => {
-    const detailedText = `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
+    // Use custom text if provided, otherwise use the template
+    const detailedText = recipe.text || `${recipe.title} is a delightful ${recipe.category.toLowerCase()} recipe that takes ${recipe.time.toLowerCase()} to prepare. This recipe combines traditional techniques with modern flavors, creating a dish that's both comforting and sophisticated. Perfect for ${recipe.category === 'Main' ? 'dinner parties' : recipe.category === 'Dessert' ? 'special occasions' : 'any meal'}.`;
     
     const newCard = {
       id: nextId,
