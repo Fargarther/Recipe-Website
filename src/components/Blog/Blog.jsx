@@ -1,4 +1,4 @@
-// Blog.jsx
+// src/components/Blog/Blog.jsx
 import React from 'react';
 import styled from 'styled-components';
 import BlogPost from './BlogPost';
@@ -23,30 +23,30 @@ const BlogGrid = styled.div`
   gap: 2.5rem;
 `;
 
-// Sample blog post data (in a real app, this would come from an API)
+// Sample blog post data for Sal
 const blogPosts = [
   {
     id: 1,
-    title: "Seasonal Foraging: Finding Inspiration in the Wild",
-    date: "October 15, 2024",
-    excerpt: "Exploring the hedgerows and woodlands for wild ingredients has been a cornerstone of my culinary approach...",
+    title: "The Art of 48-Hour Fermentation",
+    date: "November 15, 2024",
+    excerpt: "Discover why we ferment our focaccia dough for 48 hours and how this time-honored technique creates the perfect texture and flavor...",
     image: "/api/placeholder/400/250",
-    alt: "Seasonal Foraging"
+    alt: "Sourdough Fermentation"
   },
   {
     id: 2,
-    title: "Essential Equipment for the Discerning Home Chef",
-    date: "September 28, 2024",
-    excerpt: "Quality equipment doesn't have to break the bank. Here's my guide to the essential tools that will elevate your cooking...",
+    title: "Seasonal Ingredients: From Farm to Focaccia",
+    date: "October 28, 2024",
+    excerpt: "Learn how we incorporate local, seasonal ingredients from Central Illinois farmers into our artisan focaccias...",
     image: "/api/placeholder/400/250",
-    alt: "Kitchen Equipment"
+    alt: "Local Ingredients"
   }
 ];
 
 function Blog() {
   return (
     <BlogSection id="blog" data-observe>
-      <h2>Field Notes Blog</h2>
+      <h2>From Our Kitchen</h2>
       
       <BlogGrid className="blog-posts">
         {blogPosts.map(post => (

@@ -1,4 +1,4 @@
-// Hero.js
+// src/components/Home/Hero.jsx
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const HeroSection = styled.section`
   text-align: center;
   padding: 8rem 2rem;
-  background: rgba(234, 226, 214, 0.9);
+  background: rgba(250, 248, 243, 0.9);
   border-radius: var(--radius-standard);
   margin-top: 2rem;
   box-shadow: var(--shadow-soft);
@@ -76,14 +76,23 @@ const Button = styled(Link)`
   }
 `;
 
+const Verse = styled.p`
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-top: 2rem;
+  font-style: italic;
+`;
+
 function Hero() {
   return (
     <HeroSection id="hero" data-observe>
-      <HeroTitle>Culinary Alchemy, Shared Freely</HeroTitle>
+      <HeroTitle>Handcrafted with Love, Made to Order</HeroTitle>
       <HeroParagraph>
-        Frontier-inspired flavors and elevated experiments—take the recipes home, no strings attached.
+        Experience the perfect blend of tradition and artistry with our sourdough focaccia. 
+        Each loaf is carefully crafted using time-honored techniques and the finest organic ingredients.
       </HeroParagraph>
-      <Button to="/recipes">Browse Recipes</Button>
+      <Button to="/recipes">Browse Our Menu</Button>
+      <Verse>"Give us this day our daily bread" - Matthew 6:11</Verse>
     </HeroSection>
   );
 }

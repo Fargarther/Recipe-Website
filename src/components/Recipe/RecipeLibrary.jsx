@@ -1,4 +1,4 @@
-// RecipeLibrary.js
+// src/components/Recipe/RecipeLibrary.jsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { recipeData, categories } from '../../data/recipes';
@@ -15,6 +15,28 @@ const LibrarySection = styled.section`
     opacity: 1;
     transform: translateY(0);
   }
+`;
+
+const MenuHeader = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const MenuSubtitle = styled.p`
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+`;
+
+const OrderNotice = styled.div`
+  background: rgba(139, 69, 19, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-style: italic;
+  color: var(--accent);
 `;
 
 const SearchWrapper = styled.div`
@@ -180,14 +202,24 @@ function RecipeLibrary() {
 
   return (
     <LibrarySection id="library" data-observe>
-      <h2>Recipe Library</h2>
+      <h2>Our Menu</h2>
+      
+      <MenuHeader>
+        <MenuSubtitle>
+          Handcrafted focaccias and artisan spreads made with love and the finest ingredients
+        </MenuSubtitle>
+      </MenuHeader>
+      
+      <OrderNotice>
+        🍞 All focaccias require 48-hour advance notice • Free delivery in Metamora for orders over $35
+      </OrderNotice>
       
       <SearchWrapper>
         <SearchIcon>🔍</SearchIcon>
         <SearchInput
           type="text"
           id="searchInput"
-          placeholder="Search recipes..."
+          placeholder="Search menu..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -226,8 +258,8 @@ function RecipeLibrary() {
           ))
         ) : filteredRecipes.length === 0 ? (
           <EmptyState>
-            <div className="empty-icon">🍳</div>
-            <h3>No recipes found</h3>
+            <div className="empty-icon">🍞</div>
+            <h3>No items found</h3>
             <p>Try adjusting your search or filter criteria</p>
           </EmptyState>
         ) : (

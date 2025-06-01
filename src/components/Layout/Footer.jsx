@@ -1,4 +1,4 @@
-// Footer.js
+// src/components/Layout/Footer.jsx
 import React from 'react';
 import styled from 'styled-components';
 
@@ -14,7 +14,9 @@ const FooterContainer = styled.footer`
 function Footer() {
   return (
     <FooterContainer>
-      © {new Date().getFullYear()} Chef Alex • Crafted with love & linen
+      © {new Date().getFullYear()} Sal Artisan Sourdough Focaccia • Handcrafted with love in Metamora, IL
+      <br />
+      <em style={{ fontSize: '0.9rem', opacity: 0.8 }}>"Man shall not live by bread alone" - Matthew 4:4</em>
     </FooterContainer>
   );
 }

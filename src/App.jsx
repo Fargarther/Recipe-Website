@@ -18,10 +18,10 @@ import Subscribe from './components/Home/Subscribe';
 // Global styles
 const GlobalStyle = createGlobalStyle`
   :root {
-    --linen: #eae2d6;
+    --linen: #faf8f3;
     --charcoal: #333333;
-    --accent: #a67c52;
-    --accent-dark: #8b6b49;
+    --accent: #8B4513;
+    --accent-dark: #6B3410;
     --text-dark: #222222;
     --text-medium: #555555;
     --text-light: #777777;
@@ -42,7 +42,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Source Sans 3', sans-serif;
     color: var(--text-dark);
     background: var(--linen)
-      url('https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=800&q=80')
+      url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80')
       center/cover fixed;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;

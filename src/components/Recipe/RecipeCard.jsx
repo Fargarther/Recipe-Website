@@ -1,4 +1,4 @@
-// RecipeCard.js
+// src/components/Recipe/RecipeCard.jsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -48,9 +48,24 @@ const CardContent = styled.div`
   padding: 1.8rem;
 `;
 
-const CardTitle = styled.h3`
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   margin-bottom: 0.75rem;
+`;
+
+const CardTitle = styled.h3`
+  margin: 0;
   color: var(--text-dark);
+  flex: 1;
+  margin-right: 1rem;
+`;
+
+const CardPrice = styled.span`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent);
 `;
 
 const CardMeta = styled.p`
@@ -72,6 +87,8 @@ const DownloadButton = styled.a`
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   position: relative;
   overflow: hidden;
+  text-align: center;
+  width: 100%;
   
   &:before {
     content: '';
@@ -124,6 +141,19 @@ const RatingText = styled.p`
   color: var(--text-medium);
 `;
 
+const SeasonalBadge = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #e76f51;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+`;
+
 function RecipeCard({ recipe }) {
   const [rating, setRating] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -143,7 +173,8 @@ function RecipeCard({ recipe }) {
   
   const handleDownload = () => {
     setIsDownloading(true);
-    // Simulate download delay
+    // In a real app, this would link to an order form
+    window.location.href = `mailto:hello@salartisan.com?subject=Order: ${recipe.title}&body=I would like to order the ${recipe.title} (${recipe.price || '$12-25'}). %0D%0A%0D%0APickup date requested: %0D%0AQuantity: %0D%0ASpecial instructions:`;
     setTimeout(() => {
       setIsDownloading(false);
     }, 1000);
@@ -151,17 +182,23 @@ function RecipeCard({ recipe }) {
   
   return (
     <Card className="recipe-card" data-cat={recipe.category} data-id={recipe.id}>
+      {recipe.availability && <SeasonalBadge>Seasonal: {recipe.availability}</SeasonalBadge>}
       <CardImage src={recipe.image} alt={recipe.title} />
       <CardContent>
-        <CardTitle>{recipe.title}</CardTitle>
+        <CardHeader>
+          <CardTitle>{recipe.title}</CardTitle>
+          {recipe.price && <CardPrice>{recipe.price}</CardPrice>}
+        </CardHeader>
         <CardMeta>{recipe.category} · {recipe.time}</CardMeta>
         <DownloadButton 
-          href={recipe.pdf} 
-          download 
+          href="#" 
+          onClick={(e) => {
+            e.preventDefault();
+            handleDownload();
+          }}
           className="btn"
-          onClick={handleDownload}
         >
-          {isDownloading ? 'Downloading...' : 'Download PDF'}
+          {isDownloading ? 'Processing...' : 'Order This Focaccia'}
         </DownloadButton>
         <RatingContainer className="rating" data-id={recipe.id}>
           {[1, 2, 3, 4, 5].map(value => (

@@ -34,10 +34,34 @@ const SubscribeParagraph = styled.p`
   line-height: 1.8;
 `;
 
+const OrderInfo = styled.div`
+  background: var(--linen);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+`;
+
+const ContactMethod = styled.p`
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const SubscribeForm = styled.form`
   display: flex;
   max-width: 550px;
-  margin: 0 auto;
+  margin: 2rem auto 0;
   
   @media (max-width: 768px) {
     flex-direction: column;
@@ -61,7 +85,7 @@ const EmailInput = styled.input`
   &:focus {
     outline: none;
     border-color: ${props => props.$error ? '#e76f51' : 'var(--accent)'};
-    box-shadow: 0 0 0 2px ${props => props.$error ? 'rgba(231, 111, 81, 0.2)' : 'rgba(166, 124, 82, 0.2)'};
+    box-shadow: 0 0 0 2px ${props => props.$error ? 'rgba(231, 111, 81, 0.2)' : 'rgba(139, 69, 19, 0.2)'};
   }
   
   @media (max-width: 768px) {
@@ -108,7 +132,7 @@ const SubmitButton = styled.button`
   &:hover {
     background: var(--accent-dark);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(166, 124, 82, 0.3);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
     
     &:before {
       left: 100%;
@@ -224,16 +248,30 @@ function Subscribe() {
   return (
     <>
       <SubscribeSection id="subscribe" data-observe>
-        <SubscribeTitle>Join My Culinary Journey</SubscribeTitle>
+        <SubscribeTitle>Order Your Daily Bread</SubscribeTitle>
         <SubscribeParagraph>
-          Subscribe to receive new recipes, cooking tips, and seasonal inspirations delivered monthly.
+          All focaccias are made to order with 48-hour advance notice. 
+          Contact us to place your order or join our newsletter for seasonal specials.
         </SubscribeParagraph>
+        
+        <OrderInfo>
+          <h3>How to Order</h3>
+          <ContactMethod>
+            📧 Email: <a href="mailto:hello@salartisan.com">hello@salartisan.com</a>
+          </ContactMethod>
+          <ContactMethod>
+            📱 Text: <a href="sms:+13095551234">(309) 555-1234</a>
+          </ContactMethod>
+          <ContactMethod>
+            📍 Find us at Metamora Farmers Market (Saturdays)
+          </ContactMethod>
+        </OrderInfo>
         
         <SubscribeForm id="subscribeForm" onSubmit={handleSubmit}>
           <InputWrapper>
             <EmailInput
               type="email"
-              placeholder="Your email address"
+              placeholder="Join our newsletter"
               required
               value={email}
               onChange={(e) => {
@@ -250,7 +288,7 @@ function Subscribe() {
         </SubscribeForm>
         
         <SuccessMessage $visible={showSuccess}>
-          Thank you for subscribing! Check your inbox soon.
+          Thank you for subscribing! We'll be in touch soon.
         </SuccessMessage>
         
         {showConfetti && <confetti numberOfPieces={100} />}

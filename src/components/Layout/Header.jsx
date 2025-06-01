@@ -1,4 +1,4 @@
-// Header.js
+// src/components/Layout/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -33,6 +33,9 @@ const HeaderContainer = styled.header`
 
 const Title = styled.h1`
   margin: 0;
+  font-family: 'Brush Script MT', cursive;
+  font-size: 2.5rem;
+  color: var(--accent);
 `;
 
 const Nav = styled.nav`
@@ -77,14 +80,14 @@ function Header() {
 
   return (
     <HeaderContainer className={scrolled ? 'scrolled' : ''}>
-      <Title>Chef Alex</Title>
+      <Title>Sal</Title>
       <Nav>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/#spotlight">Spotlight</NavLink>
-        <NavLink to="/recipes">Recipes</NavLink>
+        <NavLink to="/#spotlight">Collection</NavLink>
+        <NavLink to="/recipes">Menu</NavLink>
         <NavLink to="/blog">Blog</NavLink>
-        <NavLink to="/about">About</NavLink>
-        <NavLink to="/subscribe">Subscribe</NavLink>
+        <NavLink to="/about">Our Story</NavLink>
+        <NavLink to="/subscribe">Order</NavLink>
       </Nav>
     </HeaderContainer>
   );

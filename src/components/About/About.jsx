@@ -1,4 +1,4 @@
-// About.js
+// src/components/About/About.jsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import GalleryDialog from './GalleryDialog.jsx';
@@ -82,28 +82,28 @@ function About() {
   
   return (
     <AboutSection id="about" data-observe>
-      <h2>About Chef Alex</h2>
+      <h2>About Sal</h2>
       
       <AboutContent className="about-content">
         <AboutImage className="about-image">
-          <ChefImage src="/api/placeholder/400/400" alt="Chef Alex" />
+          <ChefImage src="/api/placeholder/400/400" alt="Sal Artisan Focaccia" />
         </AboutImage>
         
         <AboutText>
           <AboutParagraph>
-            After training at the Culinary Institute and working in Michelin-starred restaurants across Europe, I returned to my rural roots with a passion for seasonal, local ingredients and traditional techniques reimagined for the modern table.
+            Sal began with a simple belief: exceptional bread deserves to be shared. Our journey started in a home kitchen in Metamora, Illinois, where we spent countless hours perfecting the art of sourdough focaccia.
           </AboutParagraph>
           
           <AboutParagraph>
-            My food philosophy centers on respect for ingredients, minimalist presentation, and flavors that speak for themselves. This website is a collection of recipes and techniques I've refined over the years—things I cook at home, share with friends, and believe deserve a wider audience.
+            We chose focaccia because it's more than just bread—it's a canvas for creativity and a centerpiece for gathering. Using organic King Arthur flour, premium semolina, and Partanna olive oil, we've developed recipes that honor tradition while bringing something new to Central Illinois.
           </AboutParagraph>
           
           <AboutParagraph>
-            All recipes are free to download and use. If you make something you love, consider joining my monthly newsletter or sharing with friends.
+            Today, we're blessed to offer made-to-order focaccia that combines old-world craftsmanship with modern convenience. From our kitchen to your table, we're committed to making every loaf special.
           </AboutParagraph>
           
           <GalleryButton id="openGallery" className="btn" onClick={openGallery}>
-            View Kitchen Gallery
+            View Our Kitchen
           </GalleryButton>
         </AboutText>
       </AboutContent>
@@ -114,4 +114,3 @@ function About() {
 }
 
 export default About;
-
