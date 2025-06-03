@@ -9,13 +9,14 @@ import RecipePortfolio from './RecipePortfolio';
 const HomeContainer = styled.div`
   /* Add padding at bottom to prevent content from being hidden behind portfolio */
   padding-bottom: 100px;
+  margin-top: 0; /* Remove default margin since hero is full screen */
 `;
 
 const Mission = styled.section`
   background: var(--white);
   padding: 5rem 2.5rem;
   text-align: center;
-  margin: 3rem auto;
+  margin: 5rem auto 3rem;
   max-width: 1200px;
   border-radius: var(--radius-standard);
   box-shadow: var(--shadow-soft);
