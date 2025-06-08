@@ -1,6 +1,6 @@
 // src/components/Layout/Header.jsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
@@ -87,12 +87,10 @@ const NavLink = styled(Link)`
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [isHomePage, setIsHomePage] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
-    // Check if we're on the home page
-    setIsHomePage(window.location.pathname === '/');
-    
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setScrolled(scrollY > 100);
