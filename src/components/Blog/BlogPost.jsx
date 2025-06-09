@@ -15,7 +15,7 @@ const Post = styled.article`
   }
 `;
 
-const PostImage = styled.img`
+const PostImage = styled.img.attrs({ loading: 'lazy' })`
   width: 100%;
   height: auto;
   display: block;

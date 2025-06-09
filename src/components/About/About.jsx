@@ -38,7 +38,7 @@ const AboutImage = styled.div`
   }
 `;
 
-const ChefImage = styled.img`
+const ChefImage = styled.img.attrs({ loading: 'lazy' })`
   width: 100%;
   height: auto;
   display: block;

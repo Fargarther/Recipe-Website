@@ -65,7 +65,7 @@ const GalleryItem = styled.div`
   }
 `;
 
-const GalleryImage = styled.img`
+const GalleryImage = styled.img.attrs({ loading: 'lazy' })`
   width: 100%;
   height: auto;
   display: block;
