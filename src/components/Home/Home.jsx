@@ -1,16 +1,6 @@
-// src/components/Home/Home.jsx
+// Part of src/components/Home/Home.jsx - Mission Section
 import React from 'react';
 import styled from 'styled-components';
-import Hero from './Hero';
-import Spotlight from './Spotlight/Index';
-import Subscribe from './Subscribe';
-import RecipePortfolio from './RecipePortfolio';
-
-const HomeContainer = styled.div`
-  /* Add padding at bottom to prevent content from being hidden behind portfolio */
-  padding-bottom: 100px;
-  margin-top: 0; /* Remove default margin since hero is full screen */
-`;
 
 const Mission = styled.section`
   background: var(--white);
@@ -64,6 +54,11 @@ const ValueCard = styled.div`
   }
 `;
 
+const ValueIcon = styled.div`
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+`;
+
 const ValueTitle = styled.h3`
   color: var(--accent);
   margin-bottom: 1rem;
@@ -74,61 +69,53 @@ const ValueText = styled.p`
   line-height: 1.6;
 `;
 
-function Home() {
-  const handleRecipeDragStart = (recipe) => {
-    // This will be passed to the Spotlight component
-    // to handle adding the dragged recipe to the bulletin board
-    
-    // Dispatch a custom event that Spotlight can listen to
-    window.dispatchEvent(new CustomEvent('portfolio-recipe-drag', { 
-      detail: { recipe } 
-    }));
-  };
-  
+// Component Usage:
+function MissionSection() {
   return (
-    <HomeContainer>
-      <Hero />
+    <Mission id="mission" data-observe>
+      <MissionTitle>Our Philosophy</MissionTitle>
+      <MissionStatement>
+        At Sal, we believe exceptional bread is worth the wait. Our mission is to craft 
+        focaccia that brings people together, using time-honored techniques and the 
+        finest organic ingredients to create something truly special.
+      </MissionStatement>
       
-      <Mission id="mission" data-observe>
-        <MissionTitle>Our Mission</MissionTitle>
-        <MissionStatement>
-          At Sal, we believe great bread brings people together. Our mission is to craft exceptional 
-          sourdough focaccia using time-honored techniques and the finest organic ingredients.
-        </MissionStatement>
-        
-        <Values>
-          <ValueCard>
-            <ValueTitle>Quality</ValueTitle>
-            <ValueText>
-              Premium organic ingredients and traditional sourdough methods ensure excellence.
-            </ValueText>
-          </ValueCard>
-          <ValueCard>
-            <ValueTitle>Craftsmanship</ValueTitle>
-            <ValueText>
-              Each focaccia is handmade to order with attention to every detail.
-            </ValueText>
-          </ValueCard>
-          <ValueCard>
-            <ValueTitle>Community</ValueTitle>
-            <ValueText>
-              Building relationships one customer at a time in Central Illinois.
-            </ValueText>
-          </ValueCard>
-          <ValueCard>
-            <ValueTitle>Faith</ValueTitle>
-            <ValueText>
-              Guided by our values, serving with integrity and love.
-            </ValueText>
-          </ValueCard>
-        </Values>
-      </Mission>
-      
-      <Spotlight />
-      <Subscribe />
-      <RecipePortfolio onDragStart={handleRecipeDragStart} />
-    </HomeContainer>
+      <Values>
+        <ValueCard>
+          <ValueIcon>🌾</ValueIcon>
+          <ValueTitle>Quality First</ValueTitle>
+          <ValueText>
+            Only the best organic flour, premium olive oil, and locally-sourced 
+            ingredients make it into our focaccia.
+          </ValueText>
+        </ValueCard>
+        <ValueCard>
+          <ValueIcon>⏰</ValueIcon>
+          <ValueTitle>Time & Patience</ValueTitle>
+          <ValueText>
+            48-hour fermentation isn't just a process—it's our commitment to 
+            developing complex flavors and perfect texture.
+          </ValueText>
+        </ValueCard>
+        <ValueCard>
+          <ValueIcon>🤝</ValueIcon>
+          <ValueTitle>Community</ValueTitle>
+          <ValueText>
+            From local farmers to your dinner table, we're proud to be part of 
+            Central Illinois' vibrant food community.
+          </ValueText>
+        </ValueCard>
+        <ValueCard>
+          <ValueIcon>✨</ValueIcon>
+          <ValueTitle>Artisan Craft</ValueTitle>
+          <ValueText>
+            Every loaf is shaped by hand, dimpled with care, and baked to 
+            golden perfection—no shortcuts, ever.
+          </ValueText>
+        </ValueCard>
+      </Values>
+    </Mission>
   );
 }
 
-export default Home;
+export default MissionSection;
