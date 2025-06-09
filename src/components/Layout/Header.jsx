@@ -108,7 +108,7 @@ function Header() {
       </LogoContainer>
       <Nav>
         <NavLink to="/" $isHome={isHomePage} $scrolled={scrolled}>Home</NavLink>
-        <NavLink to="/#spotlight" $isHome={isHomePage} $scrolled={scrolled}>Collection</NavLink>
+        <NavLink to="/board" $isHome={isHomePage} $scrolled={scrolled}>Board</NavLink>
         <NavLink to="/recipes" $isHome={isHomePage} $scrolled={scrolled}>Menu</NavLink>
         <NavLink to="/blog" $isHome={isHomePage} $scrolled={scrolled}>Blog</NavLink>
         <NavLink to="/about" $isHome={isHomePage} $scrolled={scrolled}>Our Story</NavLink>

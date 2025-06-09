@@ -14,6 +14,7 @@ import RecipeLibrary from './components/Recipe/RecipeLibrary';
 import Blog from './components/Blog/Blog';
 import About from './components/About/About';
 import Subscribe from './components/Home/Subscribe';
+import BoardPage from './components/Board/BoardPage';
 import styled from 'styled-components';
 import NotFound from './components/NotFound/NotFound';
 
@@ -166,6 +167,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/recipes" element={<RecipeLibrary />} />
+          <Route path="/board" element={<BoardPage />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/about" element={<About />} />
           <Route path="/subscribe" element={<Subscribe />} />
