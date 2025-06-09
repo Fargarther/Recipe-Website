@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from 'react';
 import styled from 'styled-components';
 import Stickers from './decorations/Stickers';
-import { SeasonalStickers } from './decorations/stickerData';
+import { SeasonalStickers } from './decorations/stickerData.jsx';
 import PostItNotes from './decorations/PostItNotes';
 import { postItMessages } from './decorations/postItMessages';
 

@@ -1,3 +1,6 @@
+// src/components/Home/Spotlight/decorations/stickerData.jsx
+import React from 'react';
+
 export const SeasonalStickers = {
   // Autumn Leaf
   autumnLeaf: {
@@ -110,4 +113,3 @@ export const SeasonalStickers = {
     )
   }
 };
-

@@ -1,7 +1,7 @@
 // src/components/Home/Spotlight/decorations/Stickers.jsx
 import React from 'react';
 import styled from 'styled-components';
-import { SeasonalStickers } from './stickerData';
+import { SeasonalStickers } from './stickerData.jsx';
 
 
 // Sticker Component
