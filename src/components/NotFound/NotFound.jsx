@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Section = styled.section`
@@ -14,7 +15,7 @@ const Message = styled.p`
   margin-bottom: 2rem;
 `;
 
-const HomeLink = styled.a`
+const HomeLink = styled(Link)`
   display: inline-block;
   background: var(--accent);
   color: var(--white);
@@ -35,7 +36,7 @@ function NotFound() {
     <Section data-observe>
       <Title>Page Not Found</Title>
       <Message>We can't seem to find the page you're looking for.</Message>
-      <HomeLink href="/">Return Home</HomeLink>
+      <HomeLink to="/">Return Home</HomeLink>
     </Section>
   );
 }
