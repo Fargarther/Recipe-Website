@@ -33,7 +33,7 @@ const Card = styled.article`
   }
 `;
 
-const CardImage = styled.img`
+const CardImage = styled.img.attrs({ loading: 'lazy' })`
   width: 100%;
   height: 200px;
   object-fit: cover;

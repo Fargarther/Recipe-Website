@@ -12,7 +12,7 @@ const ImageContainer = styled.div`
   overflow: hidden;
 `;
 
-const RecipeImage = styled.img`
+const RecipeImage = styled.img.attrs({ loading: 'lazy' })`
   width: 100%;
   height: 100%;
   object-fit: cover;

@@ -27,7 +27,16 @@ function ProgressBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return <ProgressBarContainer width={width} />;
+  return (
+    <ProgressBarContainer
+      width={width}
+      role="progressbar"
+      aria-valuenow={Math.round(width)}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-label="Scroll progress"
+    />
+  );
 }
 
 export default ProgressBar;

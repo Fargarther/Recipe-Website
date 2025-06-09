@@ -14,6 +14,11 @@ import RecipeLibrary from './components/Recipe/RecipeLibrary';
 import Blog from './components/Blog/Blog';
 import About from './components/About/About';
 import Subscribe from './components/Home/Subscribe';
+import styled from 'styled-components';
+import NotFound from './components/NotFound/NotFound';
+
+const SkipLink = styled.a.attrs({ className: 'skip-link' })``;
+const Main = styled.main``;
 
 // Global styles
 const GlobalStyle = createGlobalStyle`
@@ -30,6 +35,21 @@ const GlobalStyle = createGlobalStyle`
     --shadow-medium: 0 8px 24px rgba(0,0,0,0.1);
     --radius-standard: 1rem;
     --transition: 0.3s ease;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    z-index: 1000;
+    transition: top var(--transition);
+  }
+
+  .skip-link:focus {
+    top: 0;
   }
 
   *, *::before, *::after { 
@@ -139,15 +159,19 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
+      <SkipLink href="#main">Skip to content</SkipLink>
       <ProgressBar />
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipes" element={<RecipeLibrary />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/subscribe" element={<Subscribe />} />
-      </Routes>
+      <Main id="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipes" element={<RecipeLibrary />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/subscribe" element={<Subscribe />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Main>
       <Footer />
     </Router>
   );
