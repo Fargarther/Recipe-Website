@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import logo from '../../assets/logo.svg';
-import reactLogo from '../../assets/react.svg';
+import mixedBerry from '../../assets/Mixed Berry Focaccia.png';
+import rosemaryGarlic from '../../assets/Rosemary-Garlic Focaccia.png';
+import tomatoOlive from '../../assets/Tomato and Olive Focaccia.png';
 
 const CarouselWrapper = styled.div`
   position: relative;
@@ -47,7 +48,7 @@ const Button = styled.button`
 `;
 
 function ImageCarousel() {
-  const images = [logo, reactLogo];
+  const images = [mixedBerry, rosemaryGarlic, tomatoOlive];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
