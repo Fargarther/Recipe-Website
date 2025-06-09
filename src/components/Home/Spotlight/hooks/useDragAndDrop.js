@@ -47,7 +47,7 @@ const useDragAndDrop = (cards, setCards, boardRef) => {
     if (Object.keys(newPositions).length > 0) {
       setCardPositions(prev => ({ ...prev, ...newPositions }));
     }
-  }, [cards.length]); // Only depend on cards.length to avoid infinite loops
+  }, [boardRef, cards, cardPositions]);
 
   const handleCardMouseDown = useCallback((e, cardId) => {
     e.preventDefault();

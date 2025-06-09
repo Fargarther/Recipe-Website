@@ -1,8 +1,10 @@
 // src/components/Home/Spotlight/InteractiveBulletinDecorations.jsx
-import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from 'react';
 import styled from 'styled-components';
-import Stickers, { SeasonalStickers } from './decorations/Stickers';
-import PostItNotes, { postItMessages } from './decorations/PostItNotes';
+import Stickers from './decorations/Stickers';
+import { SeasonalStickers } from './decorations/stickerData';
+import PostItNotes from './decorations/PostItNotes';
+import { postItMessages } from './decorations/postItMessages';
 
 // Add New Item Button with animated icon
 const AddButton = styled.button`
@@ -193,7 +195,7 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
       
       setPostIts(initialPostIts);
     }
-  }, []); // Empty dependency array - only run once on mount
+  }, [boardRef, postIts.length]);
   
   // Save to localStorage when items change
   useEffect(() => {
@@ -226,7 +228,7 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
   };
   
   // Handle mouse move
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (!draggedItem) return;
     
     const clientX = e.clientX;
@@ -258,10 +260,10 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
         p.id === draggedItem.id ? { ...p, x: newX, y: newY } : p
       ));
     }
-  };
+  }, [draggedItem, dragStart]);
   
   // Handle mouse up - post-its fall when released
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (draggedItem && draggedItem.type === 'postit') {
       const vx = velocityRef.current.x;
       const vy = velocityRef.current.y;
@@ -316,7 +318,7 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
     
     setDraggedItem(null);
     velocityRef.current = { x: 0, y: 0 };
-  };
+  }, [draggedItem]);
   
   // Add mouse event listeners
   useEffect(() => {
@@ -328,7 +330,7 @@ const InteractiveBulletinDecorations = forwardRef(({ boardRef }, ref) => {
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [draggedItem, dragStart]);
+  }, [draggedItem, dragStart, handleMouseMove, handleMouseUp]);
   
   // Add specific sticker type
   const addSticker = (stickerType) => {

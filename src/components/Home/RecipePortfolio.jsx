@@ -498,7 +498,6 @@ const RecipePortfolio = ({ onDragStart }) => {
  const [dietaryFilters, setDietaryFilters] = useState([]);
  const [difficultyFilter, setDifficultyFilter] = useState('all');
  const [seasonFilter, setSeasonFilter] = useState('all');
- const [draggedRecipe, setDraggedRecipe] = useState(null);
  const scrollWrapperRef = useRef(null);
  
  // Handle mouse wheel for horizontal scrolling
@@ -643,7 +642,6 @@ const RecipePortfolio = ({ onDragStart }) => {
  }
  
  const handleDragStart = (e, recipe) => {
-   setDraggedRecipe(recipe);
    
    // Create a ghost image for dragging
    const ghostElement = document.createElement('div');
@@ -856,7 +854,7 @@ const RecipePortfolio = ({ onDragStart }) => {
                $active={activeCategory === category}
              >
                {recipes.length > 0 ? (
-                 recipes.map((recipe, index) => (
+                recipes.map((recipe) => (
                    <RecipeCard
                      key={recipe.id}
                      draggable
