@@ -1,5 +1,5 @@
 // src/hooks/useScrollObserver.js
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 
 /**
  * Custom hook to observe elements and add a class when they enter the viewport
@@ -8,11 +8,14 @@ import { useEffect, useRef } from 'react';
  * @returns {Object} ref - Ref to be attached to the observed element if targetRefs is not provided
  */
 export function useScrollObserver(options = {}, targetRefs = []) {
-  const defaultOptions = {
-    threshold: 0.2,
-    rootMargin: '0px',
-    ...options
-  };
+  const defaultOptions = useMemo(
+    () => ({
+      threshold: 0.2,
+      rootMargin: '0px',
+      ...options,
+    }),
+    [options]
+  );
   
   const elementRef = useRef(null);
   
@@ -26,16 +29,16 @@ export function useScrollObserver(options = {}, targetRefs = []) {
     }, defaultOptions);
     
     // If targetRefs are provided, observe those elements
+    const el = elementRef.current;
+
     if (targetRefs.length > 0) {
       targetRefs.forEach((ref) => {
         if (ref.current) {
           observer.observe(ref.current);
         }
       });
-    }
-    // Otherwise observe the element referenced by elementRef
-    else if (elementRef.current) {
-      observer.observe(elementRef.current);
+    } else if (el) {
+      observer.observe(el);
     }
     
     return () => {
@@ -46,8 +49,8 @@ export function useScrollObserver(options = {}, targetRefs = []) {
             observer.unobserve(ref.current);
           }
         });
-      } else if (elementRef.current) {
-        observer.unobserve(elementRef.current);
+      } else if (el) {
+        observer.unobserve(el);
       }
     };
   }, [defaultOptions, targetRefs]);

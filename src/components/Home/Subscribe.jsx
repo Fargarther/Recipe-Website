@@ -1,7 +1,7 @@
 // src/components/Home/Subscribe.jsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import confetti from 'react-confetti';
+import Confetti from 'react-confetti';
 
 const SubscribeSection = styled.section`
   text-align: center;
@@ -291,7 +291,7 @@ function Subscribe() {
           Thank you for subscribing! We'll be in touch soon.
         </SuccessMessage>
         
-        {showConfetti && <confetti numberOfPieces={100} />}
+        {showConfetti && <Confetti numberOfPieces={100} />}
       </SubscribeSection>
       
       <ToastContainer>

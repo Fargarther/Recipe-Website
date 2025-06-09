@@ -41,7 +41,6 @@ function Spotlight() {
   const [boardWidth, setBoardWidth] = useState(0);
   const [newCardIds, setNewCardIds] = useState(new Set());
   const [expandedCards, setExpandedCards] = useState(new Set());
-  const [cardsWithComments, setCardsWithComments] = useState(new Set());
   const [pinnedCards, setPinnedCards] = useState(() => {
     // Load pinned cards from localStorage
     const saved = localStorage.getItem('pinnedCards');
@@ -85,7 +84,6 @@ function Spotlight() {
     cardPositions,
     activeCard,
     handleCardMouseDown,
-    shufflePositions,
     setCardPositions
   } = useDragAndDrop(cards, setCards, boardRef);
   
@@ -163,27 +161,6 @@ function Spotlight() {
   };
   
   // Handle comments toggle
-  const handleCommentsToggle = (cardId, isOpen) => {
-    setCardsWithComments(prev => {
-      const newSet = new Set(prev);
-      if (isOpen) {
-        newSet.add(cardId);
-      } else {
-        newSet.delete(cardId);
-      }
-      return newSet;
-    });
-    
-    // Update z-index for the card with comments
-    if (isOpen) {
-      setCards(prevCards => 
-        prevCards.map(card => ({
-          ...card,
-          zIndex: card.id === cardId ? Math.max(...prevCards.map(c => c.zIndex)) + 100 : card.zIndex
-        }))
-      );
-    }
-  };
   
   // Handle pin toggle
   const handlePinToggle = (cardId) => {
@@ -278,7 +255,6 @@ function Spotlight() {
     clearAllCards();
     setNewCardIds(new Set());
     setExpandedCards(new Set());
-    setCardsWithComments(new Set());
     setPinnedCards(new Set());
     
     // Clear decorations (stickers and post-it notes)
@@ -328,7 +304,6 @@ function Spotlight() {
             onAddComment={(comment) => handleAddComment(card.id, card.recipeId, comment)}
             onExpand={(isExpanded) => handleCardExpand(card.id, isExpanded)}
             onPinToggle={handlePinToggle}
-            onCommentsToggle={handleCommentsToggle}
           />
         ))}
       </BulletinBoard>
