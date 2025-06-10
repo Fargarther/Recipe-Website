@@ -5,6 +5,7 @@ import { recipeData } from '../../data/recipes.js';
 import mixedBerry from '../../assets/Mixed Berry Focaccia.png';
 import rosemaryGarlic from '../../assets/Rosemary-Garlic Focaccia.png';
 import tomatoOlive from '../../assets/Tomato and Olive Focaccia.png';
+import figWalnut from '../../assets/Fig_Walnut_Focaccia.png';
 
 // A new section wrapper for the carousel on the home page
 const CarouselSection = styled.section`
@@ -42,7 +43,7 @@ const ProductCard = styled.div`
   border-radius: var(--radius-standard);
   box-shadow: var(--shadow-soft);
   transition: all 0.3s ease;
-  flex: 0 0 280px; // Give cards a fixed width so they don't shrink
+  flex: 0 0 350px; // Increased width to accommodate content
   scroll-snap-align: start;
   text-align: center;
   overflow: hidden;
@@ -53,49 +54,128 @@ const ProductCard = styled.div`
   }
 `;
 
-const CardImage = styled.img`
+const ImageContainer = styled.div`
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  height: 280px; // Increased height
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f6f1;
+`;
+
+const CardImage = styled.img`
+  width: 85%; // Adjusted for better proportion
+  height: 85%;
+  object-fit: contain;
+  transition: transform 0.6s ease;
+  
+  ${ProductCard}:hover & {
+    transform: rotate(80deg);
+  }
 `;
 
 const CardContent = styled.div`
-  padding: 1rem;
+  padding: 1.5rem 1.5rem 2rem;
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.2rem;
+  font-size: 1.3rem; // Slightly larger
   margin: 0.5rem 0;
   color: var(--text-dark);
 `;
 
-const CardPrice = styled.p`
-  font-size: 1.1rem;
-  font-weight: 600;
+const StartingPrice = styled.p`
+  font-size: 0.95rem;
+  color: var(--text-medium);
+  margin: 0.5rem 0 1rem;
+  font-style: italic;
+  transition: opacity 0.3s ease;
+  
+  ${ProductCard}:hover & {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+  }
+`;
+
+const PriceList = styled.div`
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  
+  ${ProductCard}:hover & {
+    max-height: 150px;
+    opacity: 1;
+  }
+`;
+
+const PriceRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  
+  &:not(:last-child) {
+    border-bottom: 1px dotted rgba(166, 124, 82, 0.2);
+  }
+`;
+
+const SizeLabel = styled.span`
+  color: var(--text-medium);
+  font-weight: 500;
+`;
+
+const Price = styled.span`
   color: var(--accent);
-  margin: 0;
+  font-weight: 600;
 `;
 
 function ProductCarousel() {
-  // Create featured recipes using the actual images
+  // Create featured recipes with size-based pricing
   const featuredRecipes = [
     {
       id: 'mixed-berry',
       title: 'Mixed Berry Focaccia',
-      price: '$22',
-      image: mixedBerry
+      image: mixedBerry,
+      prices: {
+        '6"': '$14',  // Premium due to berries
+        '8"': '$20',
+        '10"': '$28'
+      }
     },
     {
       id: 'rosemary-garlic',
       title: 'Rosemary-Garlic Focaccia',
-      price: '$18',
-      image: rosemaryGarlic
+      image: rosemaryGarlic,
+      prices: {
+        '6"': '$10',  // Classic, simpler ingredients
+        '8"': '$16',
+        '10"': '$22'
+      }
     },
     {
       id: 'tomato-olive',
       title: 'Tomato and Olive Focaccia',
-      price: '$20',
-      image: tomatoOlive
+      image: tomatoOlive,
+      prices: {
+        '6"': '$12',  // Mid-range, quality toppings
+        '8"': '$18',
+        '10"': '$25'
+      }
+    },
+    {
+      id: 'fig-walnut',
+      title: 'Fig & Walnut Focaccia',
+      image: figWalnut,
+      prices: {
+        '6"': '$16',  // Premium artisan with figs and walnuts
+        '8"': '$22',
+        '10"': '$30'
+      }
     }
   ];
 
@@ -105,10 +185,29 @@ function ProductCarousel() {
       <CarouselWrapper>
         {featuredRecipes.map((recipe) => (
           <ProductCard key={recipe.id}>
-            <CardImage src={recipe.image} alt={recipe.title} />
+            <ImageContainer>
+              <CardImage 
+                src={recipe.image || '/api/placeholder/400/250'} 
+                alt={recipe.title} 
+              />
+            </ImageContainer>
             <CardContent>
               <CardTitle>{recipe.title}</CardTitle>
-              <CardPrice>{recipe.price}</CardPrice>
+              <StartingPrice>Starting at {recipe.prices['6"']}</StartingPrice>
+              <PriceList>
+                <PriceRow>
+                  <SizeLabel>Personal (6")</SizeLabel>
+                  <Price>{recipe.prices['6"']}</Price>
+                </PriceRow>
+                <PriceRow>
+                  <SizeLabel>Classic (8")</SizeLabel>
+                  <Price>{recipe.prices['8"']}</Price>
+                </PriceRow>
+                <PriceRow>
+                  <SizeLabel>Family (10")</SizeLabel>
+                  <Price>{recipe.prices['10"']}</Price>
+                </PriceRow>
+              </PriceList>
             </CardContent>
           </ProductCard>
         ))}
