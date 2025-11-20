@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import homepageFocaccia from './assets/Homepage_Focaccia.jpg';
 
 // Layout Components
 import Header from './components/Layout/Header';
@@ -63,7 +64,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Source Sans 3', sans-serif;
     color: var(--text-dark);
     background: var(--linen)
-      url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80')
+      url(${homepageFocaccia})
       center/cover fixed;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;

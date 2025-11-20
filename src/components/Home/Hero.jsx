@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Logo from '../common/Logo';
+import homepageFocaccia from '../../assets/Homepage_Focaccia.jpg';
 
 const FullScreenHero = styled.section`
   position: relative;
@@ -23,7 +24,7 @@ const FullScreenHero = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1920&q=80') center/cover;
+    background: url(${homepageFocaccia}) center/cover;
     opacity: 0.3;
     z-index: 0;
   }
